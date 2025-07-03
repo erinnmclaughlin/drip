@@ -2,12 +2,80 @@
 
 @if (OpenApiOperation is null)
 {
-    <p>Operation <strong>@OperationId</strong> was not found.</p>
+    <div class="operation-not-found">
+        <div class="error-card">
+            <h1 class="error-title">Operation Not Found</h1>
+            <p class="error-message">The operation <strong>@OperationId</strong> was not found in the API documentation.</p>
+            <a href="/" class="back-link">← Back to API Overview</a>
+        </div>
+    </div>
 }
 else
 {
-    <h1>@OpenApiOperation.Summary</h1>
-    <p>@OpenApiOperation.Description</p>
+    <div class="operation-detail">
+        <div class="operation-header">
+            <div class="operation-meta">
+                <span class="operation-method">
+                    <OperationTypeTag OperationType="OperationMethod"/>
+                </span>
+                <h1 class="operation-title">@OpenApiOperation.Summary</h1>
+            </div>
+            <div class="operation-path">
+                <code>@OperationPath</code>
+            </div>
+        </div>
+        
+        @if (!string.IsNullOrEmpty(OpenApiOperation.Description))
+        {
+            <div class="operation-description">
+                @((MarkupString)Markdown.ToHtml(OpenApiOperation.Description))
+            </div>
+        }
+        
+        @if (OpenApiOperation.Parameters?.Any() == true)
+        {
+            <div class="operation-section">
+                <h2 class="section-title">Parameters</h2>
+                <div class="parameters-list">
+                    @foreach (var parameter in OpenApiOperation.Parameters)
+                    {
+                        <div class="parameter-item">
+                            <div class="parameter-header">
+                                <span class="parameter-name">@parameter.Name</span>
+                                <span class="parameter-type">@parameter.Schema?.Type</span>
+                                @if (parameter.Required)
+                                {
+                                    <span class="parameter-required">Required</span>
+                                }
+                            </div>
+                            @if (!string.IsNullOrEmpty(parameter.Description))
+                            {
+                                <p class="parameter-description">@parameter.Description</p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        
+        @if (OpenApiOperation.Responses?.Any() == true)
+        {
+            <div class="operation-section">
+                <h2 class="section-title">Responses</h2>
+                <div class="responses-list">
+                    @foreach (var response in OpenApiOperation.Responses)
+                    {
+                        <div class="response-item">
+                            <div class="response-header">
+                                <span class="response-code">@response.Key</span>
+                                <span class="response-description">@response.Value.Description</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
 }
 
 @code {
@@ -18,12 +86,23 @@ else
     public required string OperationId { get; set; }
 
     private OpenApiOperation? OpenApiOperation { get; set; }
+    private OperationType OperationMethod { get; set; }
+    private string OperationPath { get; set; } = string.Empty;
     
     protected override void OnParametersSet()
     {
-        OpenApiOperation = OpenApiDocument.Paths.Values
-            .SelectMany(x => x.Operations.Select(o => o.Value))
-            .SingleOrDefault(o => o.OperationId == OperationId);
-
+        foreach (var (path, pathItem) in OpenApiDocument.Paths)
+        {
+            foreach (var (method, operation) in pathItem.Operations)
+            {
+                if (operation.OperationId == OperationId)
+                {
+                    OpenApiOperation = operation;
+                    OperationMethod = method;
+                    OperationPath = path;
+                    return;
+                }
+            }
+        }
     }
 }

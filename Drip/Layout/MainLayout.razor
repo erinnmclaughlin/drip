@@ -1,59 +1,88 @@
 ﻿@inherits LayoutComponentBase
 @inject HttpClient HttpClient
 
-<div class="top-bar">
-    <strong>drip</strong>
-    <button type="button" onclick="document.documentElement.classList.toggle('dark')">
-        Toggle Dark Mode
-    </button>
-</div>
-<div class="main-content">
-    <aside class="sidebar">
-        @for (var i = 0; i < OpenApiDocument?.Tags.Count; i++)
-        {
-            var index = i;
-            var tag = OpenApiDocument.Tags.ElementAt(i);
-            
-            <div class="nav-item">
-                <div class="nav-dropdown" id="nav-dropdown-@index">
-                    <button type="button" class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown-@index').classList.toggle('expanded')">
-                        <span class="icon">></span>
-                        <span class="button-text">@tag.Name</span>
-                    </button>
-                    <div class="nav-dropdown-content">
-                        @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
-                        {
-                            foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
-                            {
-                                <div class="nav-dropdown-item">
-                                    <a href="@operation.OperationId">
-                                        @(operation.Summary ?? path)
-                                    </a>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
+<div class="app-container">
+    <header class="top-bar">
+        <div class="top-bar-content">
+            <div class="logo">
+                <strong>drip</strong>
             </div>
-            
-        }
-    </aside>
-    <main>
-        @if (OpenApiDocument is null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <CascadingValue Value="OpenApiDocument">
-                @Body
-            </CascadingValue>
-        }
-    </main>
+            <div class="top-bar-actions">
+                <button type="button" class="icon-button" title="Settings">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159zM8 5.754a2.246 2.246 0 1 1 0 4.492 2.246 2.246 0 0 1 0-4.492z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <div class="main-content">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                @for (var i = 0; i < OpenApiDocument?.Tags.Count; i++)
+                {
+                    var index = i;
+                    var tag = OpenApiDocument.Tags.ElementAt(i);
+                    
+                    <div class="nav-item">
+                        <div class="nav-dropdown" id="nav-dropdown-@index">
+                            <button type="button" class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown-@index').classList.toggle('expanded')">
+                                <span class="nav-dropdown-icon">></span>
+                                <span class="nav-dropdown-text">@tag.Name</span>
+                                @if (tag.Description?.Contains("beta", StringComparison.OrdinalIgnoreCase) == true)
+                                {
+                                    <span class="nav-badge nav-badge-beta">BETA</span>
+                                }
+                                @if (tag.Description?.Contains("new", StringComparison.OrdinalIgnoreCase) == true)
+                                {
+                                    <span class="nav-badge nav-badge-new">NEW</span>
+                                }
+                            </button>
+                            <div class="nav-dropdown-content">
+                                @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
+                                {
+                                    foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+                                    {
+                                        <div class="nav-dropdown-item">
+                                            <a href="@operation.OperationId" class="nav-link">
+                                                <span class="nav-link-method">
+                                                    <OperationTypeTag OperationType="method"/>
+                                                </span>
+                                                <span class="nav-link-text">
+                                                    @(operation.Summary ?? path)
+                                                </span>
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </nav>
+        </aside>
+        
+        <main class="content">
+            @if (OpenApiDocument is null)
+            {
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Loading API documentation...</p>
+                </div>
+            }
+            else
+            {
+                <CascadingValue Value="OpenApiDocument">
+                    @Body
+                </CascadingValue>
+            }
+        </main>
+    </div>
 </div>
 
 @code {
-    
     private OpenApiDocument? OpenApiDocument { get; set; }
     private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
 
