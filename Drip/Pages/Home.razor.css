@@ -1,0 +1,22 @@
+﻿.tag-group {
+    padding: 0 2rem; 
+    margin-bottom: 1rem;
+}
+
+.tag-name {
+    margin-bottom: 0;
+}
+
+.tag-description {
+    margin-top: 0.5rem;
+}
+
+.operation-group {
+    padding: 0 2rem;
+}
+
+.operation {
+    display: grid;
+    grid-template-columns: 80px auto;
+    margin-bottom: 0.5rem;
+}

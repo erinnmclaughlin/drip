@@ -1,0 +1,29 @@
+﻿@page "/{OperationId}"
+
+@if (OpenApiOperation is null)
+{
+    <p>Operation <strong>@OperationId</strong> was not found.</p>
+}
+else
+{
+    <h1>@OpenApiOperation.Summary</h1>
+    <p>@OpenApiOperation.Description</p>
+}
+
+@code {
+    [CascadingParameter]
+    public required OpenApiDocument OpenApiDocument { get; set; }
+    
+    [Parameter]
+    public required string OperationId { get; set; }
+
+    private OpenApiOperation? OpenApiOperation { get; set; }
+    
+    protected override void OnParametersSet()
+    {
+        OpenApiOperation = OpenApiDocument.Paths.Values
+            .SelectMany(x => x.Operations.Select(o => o.Value))
+            .SingleOrDefault(o => o.OperationId == OperationId);
+
+    }
+}

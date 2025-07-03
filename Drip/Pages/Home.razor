@@ -1,0 +1,52 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<div style="padding: 1rem 2rem;">
+    <h1>@OpenApiDocument.Info.Title</h1>
+    <span class="tags">
+        <span class="tag">v@(OpenApiDocument.Info.Version)</span>
+    </span>
+    @if (OpenApiDocument.Info.Description != null)
+    {
+        <p>@((MarkupString)Markdown.ToHtml(OpenApiDocument.Info.Description))</p>
+    }
+</div>
+    
+<hr/>
+
+@foreach (var tag in OpenApiDocument.Tags)
+{
+    <div class="tag-group">
+        <h2 class="tag-name">@tag.Name</h2>
+            
+        @if (tag.Description != null)
+        {
+            <p class="tag-description">@tag.Description</p>
+        }
+    </div>
+            
+    <div class="operation-group">
+        @foreach (var (path, pathItem) in OpenApiDocument.Paths)
+        {
+            foreach (var (method, methodItem) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+            {
+                <div class="operation">
+                    <span class="operation-method">
+                        <OperationTypeTag OperationType="method"/>
+                    </span>
+                    <span class="operation-title">
+                        @(methodItem.Summary ?? path)
+                    </span>
+                </div>
+            }
+        }
+    </div>
+}
+
+@code {
+
+    [CascadingParameter]
+    public required OpenApiDocument OpenApiDocument { get; set; }
+
+}

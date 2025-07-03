@@ -1,0 +1,11 @@
+﻿@using Microsoft.OpenApi.Extensions
+@using Microsoft.OpenApi.Models
+
+<span class="tag @OperationType @OperationType.ToString().ToLower()">
+    @OperationType.GetDisplayName()
+</span>
+
+@code {
+    [Parameter, EditorRequired]
+    public required OperationType OperationType { get; set; }
+}

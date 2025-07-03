@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drip", "Drip\Drip.csproj", "{916D48AA-E69E-4686-B298-178241A2A92D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApi", "ExampleApi\ExampleApi.csproj", "{7677473E-8485-4679-AEE7-D76C39AEF5F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{916D48AA-E69E-4686-B298-178241A2A92D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{916D48AA-E69E-4686-B298-178241A2A92D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{916D48AA-E69E-4686-B298-178241A2A92D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{916D48AA-E69E-4686-B298-178241A2A92D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7677473E-8485-4679-AEE7-D76C39AEF5F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7677473E-8485-4679-AEE7-D76C39AEF5F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7677473E-8485-4679-AEE7-D76C39AEF5F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7677473E-8485-4679-AEE7-D76C39AEF5F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

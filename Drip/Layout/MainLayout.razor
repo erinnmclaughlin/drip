@@ -1,0 +1,67 @@
+﻿@inherits LayoutComponentBase
+@inject HttpClient HttpClient
+
+<div class="top-bar">
+    <strong>drip</strong>
+    <button type="button" onclick="document.documentElement.classList.toggle('dark')">
+        Toggle Dark Mode
+    </button>
+</div>
+<div class="main-content">
+    <aside class="sidebar">
+        @for (var i = 0; i < OpenApiDocument?.Tags.Count; i++)
+        {
+            var index = i;
+            var tag = OpenApiDocument.Tags.ElementAt(i);
+            
+            <div class="nav-item">
+                <div class="nav-dropdown" id="nav-dropdown-@index">
+                    <button type="button" class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown-@index').classList.toggle('expanded')">
+                        <span class="icon">></span>
+                        <span class="button-text">@tag.Name</span>
+                    </button>
+                    <div class="nav-dropdown-content">
+                        @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
+                        {
+                            foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+                            {
+                                <div class="nav-dropdown-item">
+                                    <a href="@operation.OperationId">
+                                        @(operation.Summary ?? path)
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            
+        }
+    </aside>
+    <main>
+        @if (OpenApiDocument is null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <CascadingValue Value="OpenApiDocument">
+                @Body
+            </CascadingValue>
+        }
+    </main>
+</div>
+
+@code {
+    
+    private OpenApiDocument? OpenApiDocument { get; set; }
+    private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var stream = await HttpClient.GetStreamAsync("petstore.json");
+        //var stream = await HttpClient.GetStreamAsync("museum.yaml"); // 3.1.0 is not currently supported
+        OpenApiDocument = new OpenApiStreamReader().Read(stream, out var diagnostic);
+        OpenApiDiagnostic = diagnostic;
+    }
+}
