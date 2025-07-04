@@ -8,6 +8,14 @@
     </div>
     @if (OpenApiDocument is not null)
     {
+        <div class="nav-item">
+            <NavLink href="schema-test" class="nav-link">
+                <span class="nav-link-text">Schema Test</span>
+            </NavLink>
+        </div>
+    }
+    @if (OpenApiDocument is not null)
+    {
         @foreach (var tag in OpenApiDocument.Tags)
         {
             var hasActiveOperation = HasActiveOperationInTag(tag.Name);

@@ -1,0 +1,32 @@
+@page "/schema-test"
+
+<PageTitle>Schema Tree Test | drip</PageTitle>
+
+<div class="schema-test-page">
+    <h1>Schema Tree Component Test</h1>
+    <p>This page demonstrates the enhanced SchemaTree component with different types of schemas.</p>
+    
+    @if (OpenApiDocument?.Components?.Schemas != null)
+    {
+        <div class="schemas-grid">
+            @foreach (var (schemaName, schema) in OpenApiDocument.Components.Schemas)
+            {
+                <div class="schema-card">
+                    <h2 class="schema-name">@schemaName</h2>
+                    <SchemaDisplay Schema="schema" />
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="loading">
+            <p>Loading schemas...</p>
+        </div>
+    }
+</div>
+
+@code {
+    [CascadingParameter]
+    public required OpenApiDocument OpenApiDocument { get; set; }
+} 
