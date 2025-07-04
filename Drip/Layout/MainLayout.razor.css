@@ -117,10 +117,11 @@
     width: 1rem;
     margin-right: var(--spacing-sm);
     transition: transform var(--transition-normal);
+    transform: rotate(-90deg);
 }
 
 .nav-dropdown.expanded .nav-dropdown-icon {
-    transform: rotate(90deg);
+    transform: rotate(0deg);
 }
 
 .nav-dropdown-text {
