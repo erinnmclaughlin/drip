@@ -19,7 +19,7 @@
             @if (OpenApiDocument.Info.Description != null)
             {
                 <div class="hero-description">
-                    @((MarkupString)Markdown.ToHtml(OpenApiDocument.Info.Description))
+                    @((MarkupString)RenderMarkdownWithLinksNewTab(OpenApiDocument.Info.Description))
                 </div>
             }
         </div>
@@ -70,4 +70,16 @@
 @code {
     [CascadingParameter]
     public required OpenApiDocument OpenApiDocument { get; set; }
+
+    private string RenderMarkdownWithLinksNewTab(string markdown)
+    {
+        var html = Markdown.ToHtml(markdown ?? "");
+        // Add target="_blank" and rel="noopener noreferrer" to all <a> tags
+        return System.Text.RegularExpressions.Regex.Replace(
+            html,
+            "<a\\s",
+            "<a target=\"_blank\" rel=\"noopener noreferrer\" ",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+    }
 }
