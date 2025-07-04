@@ -1,0 +1,119 @@
+@using Microsoft.OpenApi.Models
+@using System.Text.Json
+
+@if (OpenApiOperation is not null && (OpenApiOperation.Parameters?.Any() == true || OpenApiOperation.RequestBody != null))
+{
+    <div class="try-it-form">
+        <h2 class="form-title">Try it out</h2>
+        <form @onsubmit="HandleSubmit">
+            @if (OpenApiOperation.Parameters?.Any() == true)
+            {
+                <div class="form-section">
+                    <h3 class="section-header">Parameters</h3>
+                    @foreach (var parameter in OpenApiOperation.Parameters)
+                    {
+                        <div class="form-field">
+                            <label>
+                                <span class="field-label">@parameter.Name</span>
+                                @if (parameter.Required)
+                                {
+                                    <span class="required">*</span>
+                                }
+                                <span class="field-type">(@parameter.In)</span>
+                            </label>
+                            <input class="form-input"
+                                   value="@parameterValues[parameter.Name]"
+                                   placeholder="@parameter.Description"
+                                   @oninput="(e => parameterValues[parameter.Name] = e.Value?.ToString() ?? string.Empty)" />
+                        </div>
+                    }
+                </div>
+            }
+            @if (OpenApiOperation.RequestBody != null)
+            {
+                <div class="form-section">
+                    <h3 class="section-header">Request Body</h3>
+                    @if (bodyValues.Count > 0)
+                    {
+                        @foreach (var prop in bodyValues.Keys)
+                        {
+                            <div class="form-field">
+                                <label>
+                                    <span class="field-label">@prop</span>
+                                </label>
+                                <input class="form-input"
+                                       value="@bodyValues[prop]"
+                                       @oninput="(e => bodyValues[prop] = e.Value?.ToString() ?? string.Empty)" />
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="form-field">
+                            <label>
+                                <span class="field-label">Raw Body</span>
+                            </label>
+                            <textarea class="form-input"
+                                      value="@RawBodyValue"
+                                      @oninput="(e => RawBodyValue = e.Value?.ToString() ?? string.Empty)"></textarea>
+                        </div>
+                    }
+                </div>
+            }
+            <button type="submit" class="send-btn">Send Request</button>
+        </form>
+        @if (apiResponse != null)
+        {
+            <div class="response-section">
+                <h4>Response</h4>
+                <pre>@apiResponse</pre>
+            </div>
+        }
+    </div>
+} 
+
+
+@code {
+    [Parameter]
+    public OpenApiOperation? OpenApiOperation { get; set; }
+
+    private Dictionary<string, string> parameterValues = new();
+    private Dictionary<string, string> bodyValues = new();
+    private string? apiResponse;
+
+    protected override void OnParametersSet()
+    {
+        if (OpenApiOperation != null)
+        {
+            parameterValues = OpenApiOperation.Parameters?.ToDictionary(p => p.Name, p => string.Empty) ?? new();
+            if (OpenApiOperation.RequestBody != null && OpenApiOperation.RequestBody.Content.Values.FirstOrDefault()?.Schema?.Properties != null)
+            {
+                bodyValues = OpenApiOperation.RequestBody.Content.Values.First().Schema.Properties.ToDictionary(c => c.Key, c => string.Empty);
+            }
+            else
+            {
+                bodyValues = new();
+            }
+        }
+    }
+
+    private string RawBodyValue
+    {
+        get => bodyValues.ContainsKey("raw") ? bodyValues["raw"] : string.Empty;
+        set => bodyValues["raw"] = value;
+    }
+
+    private async Task HandleSubmit(EventArgs e)
+    {
+        await SendApiRequest();
+    }
+
+    private Task SendApiRequest()
+    {
+        // For now, just show the collected values
+        apiResponse = $"Parameters: {JsonSerializer.Serialize(parameterValues)}\n" +
+                      $"Body: {JsonSerializer.Serialize(bodyValues)}";
+                      
+        return Task.CompletedTask;
+    }
+}

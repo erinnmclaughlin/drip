@@ -126,73 +126,7 @@
 
             @if (OpenApiOperation.Parameters?.Any() == true || OpenApiOperation.RequestBody != null)
             {
-                <div class="try-it-form">
-                    <h2 class="form-title">Try it out</h2>
-                    <form @onsubmit="HandleSubmit">
-                        @if (OpenApiOperation.Parameters?.Any() == true)
-                        {
-                            <div class="form-section">
-                                <h3 class="section-header">Parameters</h3>
-                                @foreach (var parameter in OpenApiOperation.Parameters)
-                                {
-                                    <div class="form-field">
-                                        <label>
-                                            <span class="field-label">@parameter.Name</span>
-                                            @if (parameter.Required)
-                                            {
-                                                <span class="required">*</span>
-                                            }
-                                            <span class="field-type">(@parameter.In)</span>
-                                        </label>
-                                        <input class="form-input"
-                                               value="@parameterValues[parameter.Name]"
-                                               placeholder="@parameter.Description"
-                                               @oninput="(e => parameterValues[parameter.Name] = e.Value?.ToString() ?? string.Empty)" />
-                                    </div>
-                                }
-                            </div>
-                        }
-                        @if (OpenApiOperation.RequestBody != null)
-                        {
-                            <div class="form-section">
-                                <h3 class="section-header">Request Body</h3>
-                                @if (bodyValues.Count > 0)
-                                {
-                                    @foreach (var prop in bodyValues.Keys)
-                                    {
-                                        <div class="form-field">
-                                            <label>
-                                                <span class="field-label">@prop</span>
-                                            </label>
-                                            <input class="form-input"
-                                                   value="@bodyValues[prop]"
-                                                   @oninput="(e => bodyValues[prop] = e.Value?.ToString() ?? string.Empty)" />
-                                        </div>
-                                    }
-                                }
-                                else
-                                {
-                                    <div class="form-field">
-                                        <label>
-                                            <span class="field-label">Raw Body</span>
-                                        </label>
-                                        <textarea class="form-input"
-                                                  value="@RawBodyValue"
-                                                  @oninput="(e => RawBodyValue = e.Value?.ToString() ?? string.Empty)"></textarea>
-                                    </div>
-                                }
-                            </div>
-                        }
-                        <button type="submit" class="send-btn">Send Request</button>
-                    </form>
-                    @if (apiResponse != null)
-                    {
-                        <div class="response-section">
-                            <h4>Response</h4>
-                            <pre>@apiResponse</pre>
-                        </div>
-                    }
-                </div>
+                <TryItOutForm OpenApiOperation="OpenApiOperation" />
             }
         </div>
     }
@@ -214,16 +148,6 @@
     private OperationType OperationMethod { get; set; }
     private string OperationPath { get; set; } = string.Empty;
     
-    private Dictionary<string, string> parameterValues = new();
-    private Dictionary<string, string> bodyValues = new();
-    private string? apiResponse;
-    
-    private string RawBodyValue
-    {
-        get => bodyValues.ContainsKey("raw") ? bodyValues["raw"] : string.Empty;
-        set => bodyValues["raw"] = value;
-    }
-    
     protected override void OnParametersSet()
     {
         foreach (var (path, pathItem) in OpenApiDocument.Paths)
@@ -236,24 +160,9 @@
                     OperationMethod = method;
                     OperationPath = path;
                     _tag = Tag ?? operation.Tags.FirstOrDefault()?.Name;
-
-                    parameterValues = OpenApiOperation?.Parameters.ToDictionary(p => p.Name, p => string.Empty) ?? new();
-                    bodyValues = OpenApiOperation?.RequestBody.Content.Values.First().Schema.Properties.ToDictionary(c => c.Key, c => string.Empty) ?? new();
                     return;
                 }
             }
         }
-    }
-
-    private async Task SendApiRequest()
-    {
-        // For now, just show the collected values
-        apiResponse = $"Parameters: {System.Text.Json.JsonSerializer.Serialize(parameterValues)}\n" +
-                      $"Body: {System.Text.Json.JsonSerializer.Serialize(bodyValues)}";
-    }
-
-    private async Task HandleSubmit(EventArgs e)
-    {
-        await SendApiRequest();
     }
 }
