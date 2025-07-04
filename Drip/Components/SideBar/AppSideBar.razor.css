@@ -4,7 +4,7 @@
     min-height: 0;
     transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
     padding: var(--sidebar-padding);
-    padding-top: calc(var(--sidebar-padding) + 24px); /* Account for EXPLORER header */
+    padding-bottom: var(--spacing-2xl);
     font-family: var(--font-monospace);
     font-size: var(--font-size-sm);
 }

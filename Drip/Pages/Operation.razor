@@ -16,6 +16,11 @@
         <PageTitle>@OpenApiOperation.Summary | drip</PageTitle>
         
         <div class="operation-detail">
+            @if (_tag is not null)
+            {
+                <h1>@_tag</h1>
+            }
+
             <div class="operation-header">
                 <div class="operation-meta">
                     <span class="operation-method">
@@ -76,7 +81,7 @@
                         <p class="body-description">@OpenApiOperation.RequestBody.Description</p>
                     }
                     <div class="content-types">
-                        <SchemaContentGroup Content="OpenApiOperation.RequestBody.Content" />
+                        schema
                     </div>
                 </div>
             }
@@ -105,7 +110,7 @@
                                 @if (response.Value.Content?.Any() == true)
                                 {
                                     <div class="response-content">
-                                        <SchemaContentGroup Content="response.Value.Content" />
+                                        schema
                                     </div>
                                 }
                             </div>
@@ -118,11 +123,16 @@
 </div>
 
 @code {
+    private string? _tag;
+
     [CascadingParameter]
     public required OpenApiDocument OpenApiDocument { get; set; }
     
     [Parameter]
     public required string OperationId { get; set; }
+
+    [Parameter, SupplyParameterFromQuery]
+    public string? Tag { get; set; }
 
     private OpenApiOperation? OpenApiOperation { get; set; }
     private OperationType OperationMethod { get; set; }
@@ -139,6 +149,7 @@
                     OpenApiOperation = operation;
                     OperationMethod = method;
                     OperationPath = path;
+                    _tag = Tag ?? operation.Tags.FirstOrDefault()?.Name;
                     return;
                 }
             }
