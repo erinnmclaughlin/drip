@@ -229,3 +229,12 @@
 .nav-dropdown-spacer {
     visibility: hidden;
 }
+
+.logo-link,
+.logo-link:visited,
+.logo-link:active,
+.logo-link:focus,
+.logo-link:hover {
+    color: var(--text-primary);
+    text-decoration: none;
+}
