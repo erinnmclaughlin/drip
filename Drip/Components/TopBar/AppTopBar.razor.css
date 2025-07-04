@@ -93,36 +93,6 @@
     display: block;
 }
 
-::deep .upload-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: var(--accent-info);
-    color: var(--text-primary);
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    font-family: var(--font-monospace);
-    transition: all var(--transition-normal);
-    border: 1px solid var(--accent-info);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-::deep .upload-link:hover {
-    background: var(--accent-get);
-    color: var(--text-primary);
-    text-decoration: none;
-    box-shadow: var(--glow-primary);
-    transform: translateY(-1px);
-}
-
-.upload-text {
-    display: inline;
-}
-
 .default-doc-button {
     display: flex;
     align-items: center;
@@ -162,6 +132,7 @@
     transition: all var(--transition-normal);
     cursor: pointer;
     font-family: var(--font-monospace);
+    text-decoration: none;
 }
 
 .icon-button:hover {
@@ -170,6 +141,25 @@
     color: var(--text-primary);
     box-shadow: var(--glow-primary);
     transform: translateY(-1px);
+}
+
+/* Override NavLink styling for upload button */
+::deep .upload-button,
+::deep .upload-button:visited,
+::deep .upload-button:active,
+::deep .upload-button:focus,
+::deep .upload-button:hover {
+    background: var(--background-tertiary) !important;
+    border-color: var(--border-default) !important;
+    color: var(--text-secondary) !important;
+    text-decoration: none !important;
+}
+
+::deep .upload-button:hover {
+    background: var(--background-hover) !important;
+    border-color: var(--border-focus) !important;
+    color: var(--text-primary) !important;
+    box-shadow: var(--glow-primary) !important;
 }
 
 /* Responsive design */
@@ -205,19 +195,6 @@
         display: none;
     }
     
-    ::deep .upload-link {
-        padding: var(--spacing-xs) var(--spacing-sm);
-        font-size: var(--font-size-xs);
-    }
-    
-    .upload-text {
-        display: none;
-    }
-    
-    ::deep .upload-link::after {
-        content: "Upload";
-    }
-    
     .icon-button {
         width: 32px;
         height: 32px;
@@ -240,17 +217,6 @@
     /* Hide document selector on mobile */
     .top-bar-actions > div:first-child {
         display: none;
-    }
-    
-    ::deep .upload-link {
-        padding: var(--spacing-xs);
-        min-width: auto;
-    }
-    
-    ::deep .upload-link::after {
-        content: "+";
-        font-size: var(--font-size-lg);
-        font-weight: var(--font-weight-bold);
     }
     
     .icon-button {
