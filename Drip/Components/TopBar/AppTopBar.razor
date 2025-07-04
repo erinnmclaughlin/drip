@@ -15,7 +15,7 @@
             <div class="logo">
                 <NavLink href="" class="logo-link">
                     <span class="icon">
-                        <Raindrop />
+                        @AppIcon.Raindrop(20)
                     </span>
                     <strong>drip</strong>
                 </NavLink>
@@ -27,7 +27,7 @@
                 <DocumentSelector />
             }
             <NavLink href="upload" class="icon-button button" title="Upload OpenAPI Document" aria-label="Upload OpenAPI Document">
-                <Upload />
+                @AppIcon.Upload()
             </NavLink>
             <button type="button" class="icon-button" title="Toggle Light/Dark Mode" aria-label="Toggle Light/Dark Mode" @onclick="ThemeService.ToggleThemeAsync">
                 @if (_currentTheme == "light")

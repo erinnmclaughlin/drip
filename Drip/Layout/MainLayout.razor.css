@@ -1,9 +1,10 @@
 ﻿.app-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    background: var(--background-primary);
-    font-family: var(--font-primary);
+    height: 100%;
+    position: relative;
+    
+    --sidebar-width: 350px;
 }
 
 .main-content {
@@ -12,6 +13,7 @@
     overflow: hidden;
     background: var(--background-primary);
     position: relative;
+    padding-top: var(--topbar-height);
 }
 
 .sidebar {
@@ -23,24 +25,8 @@
     flex-direction: column;
     transition: all 0.3s var(--transition-normal);
     position: relative;
-    z-index: var(--z-dropdown);
-}
-
-.sidebar::before {
-    content: "EXPLORER";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--background-secondary);
-    color: var(--text-secondary);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-bottom: 1px solid var(--border-default);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-family: var(--font-monospace);
+    z-index: var(--z-sidebar);
+    padding-top: var(--content-header-height);
 }
 
 .sidebar-close-btn {
@@ -74,15 +60,14 @@
 }
 
 .content-header {
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: var(--topbar-height);
     background: var(--background-secondary);
     color: var(--text-secondary);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-bold);
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
     border-bottom: 1px solid var(--border-default);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -91,6 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: var(--content-header-height);
 }
 
 .content {
@@ -99,6 +85,17 @@
     overflow-y: auto;
     width: 100%;
     position: relative;
+    padding-top: var(--content-header-height);
+}
+
+.content > .content-header {
+    left: var(--sidebar-width);
+    right: 0;
+}
+
+.sidebar > .content-header {
+    border-right: 2px solid var(--border-terminal);
+    width: var(--sidebar-width);
 }
 
 .loading-container {
@@ -240,8 +237,8 @@
 
 /* Responsive design for terminal */
 @media (max-width: 1024px) {
-    .sidebar {
-        width: 260px;
+    .app-container {
+        --sidebar-width: 300px;
     }
     
     .status-left,
@@ -251,14 +248,25 @@
 }
 
 @media (max-width: 768px) {
+    .app-container {
+        --topbar-height: 48px;
+        --content-header-height: 48px;
+        --sidebar-widh: 280px;
+    }
+    
     .sidebar {
         position: fixed;
         top: 0;
         left: 0;
         bottom: 0;
-        width: 280px;
         transform: translateX(-100%);
         z-index: var(--z-dropdown);
+        border-right: 0;
+    }
+    
+    .sidebar .content-header {
+        top: 0;
+        border-right: 0;
     }
     
     .sidebar.sidebar-open {
@@ -280,10 +288,12 @@
     .content {
         width: 100%;
         margin-left: 0;
+        padding-top: 0;
     }
 
     .content > .content-header {
         display: none;
+        border-right: 0;
     }
     
     .status-bar {
@@ -292,12 +302,7 @@
 }
 
 @media (max-width: 480px) {
-    .sidebar {
-        width: 100%;
-    }
-
-    .content-header {
-        padding: var(--spacing-xs);
-        font-size: 10px;
+    .app-container {
+        --sidebar-width: 100%;
     }
 }

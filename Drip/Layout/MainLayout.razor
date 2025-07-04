@@ -3,7 +3,6 @@
 @inject ThemeService ThemeService
 @inject OpenApiService OpenApiService
 @inject OpenApiStateService StateService
-@inject IJSRuntime JSRuntime
 @implements IDisposable
 
 <div class="app-container">
@@ -15,10 +14,7 @@
                 <div class="content-header">
                     <span>EXPLORER</span>
                     <button class="sidebar-close-btn" @onclick="CloseSidebar" aria-label="Close sidebar">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
+                        @AppIcon.Close()
                     </button>
                 </div>
                 <Drip.Components.SideBar.AppSideBar />
@@ -79,7 +75,7 @@
 
 @code {
     private string _currentTheme = "dark";
-    private bool IsSidebarOpen { get; set; } = false; // Start closed by default
+    private bool IsSidebarOpen { get; set; } // Start closed by default
     
     private OpenApiDocument? OpenApiDocument { get; set; }
     private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
@@ -106,10 +102,6 @@
         if (firstRender)
         {
             _currentTheme = await ThemeService.GetThemeAsync();
-            
-            // Set initial sidebar state based on screen size
-            await SetInitialSidebarState();
-            
             StateHasChanged();
         }
     }
@@ -118,31 +110,6 @@
     {
         StateService.OnDocumentChanged -= HandleDocumentChanged;
         ThemeService.OnThemeChanged -= HandleThemeChanged;
-    }
-
-    private async Task SetInitialSidebarState()
-    {
-        // Check if we're on mobile and set sidebar state accordingly
-        if (OperatingSystem.IsBrowser())
-        {
-            try
-            {
-                // Use JavaScript to check window width
-                var js = "window.innerWidth <= 768";
-                var isMobile = await JSRuntime.InvokeAsync<bool>("eval", js);
-                IsSidebarOpen = !isMobile; // Open on desktop, closed on mobile
-            }
-            catch
-            {
-                // Fallback: assume desktop if JavaScript fails
-                IsSidebarOpen = true;
-            }
-        }
-        else
-        {
-            // Fallback for non-browser environments
-            IsSidebarOpen = true;
-        }
     }
 
     private void CloseSidebar()

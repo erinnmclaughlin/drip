@@ -1,6 +1,11 @@
 @import url("modern-normalize.css");
 @import url("variables.css");
 
+:root {
+    --topbar-height: 64px;
+    --content-header-height: 32px;
+}
+
 /* Terminal-specific scrollbar styling */
 ::-webkit-scrollbar {
     width: 8px;
@@ -52,6 +57,12 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+}
+
+html,
+body,
+#app {
+    height: 100%;
 }
 
 /* Terminal-style code blocks */
