@@ -24,12 +24,12 @@ jobs:
         run: dotnet build Drip/Drip.csproj --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish Drip/Drip.csproj --configuration Release --output publish_output --nologo
+        run: dotnet publish Drip/Drip.csproj --configuration Release --nologo
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./publish_output/wwwroot
+          publish_dir: ./Drip/bin/Release/net9.0/publish/wwwroot
           publish_branch: gh-pages
           force_orphan: true 
