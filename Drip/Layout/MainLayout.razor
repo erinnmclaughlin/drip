@@ -7,13 +7,13 @@
     <header class="top-bar">
         <div class="top-bar-content">
             <div class="logo">
-                <a href="/" class="logo-link">
+                <NavLink href="/" class="logo-link">
                     <svg class="logo-raindrop" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M10 2C10 2 4 9 4 13a6 6 0 0 0 12 0c0-4-6-11-6-11z" fill="#3fa7f4" stroke="none"/>
                       <path d="M10 2C10 2 4 9 4 13a6 6 0 0 0 12 0c0-4-6-11-6-11z" />
                     </svg>
                     <strong>drip</strong>
-                </a>
+                </NavLink>
             </div>
             <div class="top-bar-actions">
                 <button type="button" class="icon-button" title="Toggle Light/Dark Mode" aria-label="Toggle Light/Dark Mode" @onclick="ToggleTheme">
@@ -36,9 +36,9 @@
         <aside class="sidebar">
             <nav class="sidebar-nav">
                 <div class="nav-item">
-                    <a href="/" class="nav-link @(IsHomePage() ? "active" : "")">
+                    <NavLink Match="NavLinkMatch.All" href="/" class="nav-link">
                         <span class="nav-link-text">Home</span>
-                    </a>
+                    </NavLink>
                 </div>
                 @for (var i = 0; i < OpenApiDocument?.Tags.Count; i++)
                 {
@@ -70,9 +70,8 @@
                                 {
                                     foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
                                     {
-                                        var isActive = IsActiveOperation(operation.OperationId);
                                         <div class="nav-dropdown-item">
-                                            <a href="/@operation.OperationId" class="nav-link @(isActive ? "active" : "")">
+                                            <NavLink href="@operation.OperationId" class="nav-link">
                                                 <span class="nav-dropdown-icon nav-dropdown-spacer"></span>
                                                 <span class="nav-link-text">
                                                     @(operation.Summary ?? path)
@@ -80,7 +79,7 @@
                                                 <span class="nav-link-method">
                                                     <OperationTypeTag OperationType="method"/>
                                                 </span>
-                                            </a>
+                                            </NavLink>
                                         </div>
                                     }
                                 }
