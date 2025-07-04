@@ -1,0 +1,32 @@
+@using Microsoft.OpenApi.Models
+
+@if (Content != null)
+{
+    var grouped = Content
+        .Where(c => c.Value.Schema != null)
+        .GroupBy(c => c.Value.Schema.Reference?.Id ?? c.Value.Schema.GetHashCode().ToString())
+        .Select(g => new {
+            ContentTypes = g.Select(x => x.Key).ToList(),
+            Schema = g.First().Value.Schema
+        });
+
+    @foreach (var group in grouped)
+    {
+        <div class="content-type-item">
+            <div class="content-type-header">
+                <div class="content-type-tags" style="margin-bottom: 0.75rem;">
+                    @foreach (var ct in group.ContentTypes)
+                    {
+                        <span class="content-type-tag">@ct</span>
+                    }
+                </div>
+                <SchemaDisplay Schema="group.Schema" />
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public IDictionary<string, OpenApiMediaType>? Content { get; set; }
+} 

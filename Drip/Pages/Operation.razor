@@ -75,29 +75,7 @@ else
                     <p class="body-description">@OpenApiOperation.RequestBody.Description</p>
                 }
                 <div class="content-types">
-                    @{
-                        var grouped = OpenApiOperation.RequestBody.Content
-                            .Where(c => c.Value.Schema != null)
-                            .GroupBy(c => c.Value.Schema.Reference?.Id ?? c.Value.Schema.GetHashCode().ToString())
-                            .Select(g => new {
-                                ContentTypes = g.Select(x => x.Key).ToList(),
-                                Schema = g.First().Value.Schema
-                            });
-                    }
-                    @foreach (var group in grouped)
-                    {
-                        <div class="content-type-item">
-                            <div class="content-type-header">
-                                <div class="content-type-tags" style="margin-bottom: 0.75rem;">
-                                    @foreach (var ct in group.ContentTypes)
-                                    {
-                                        <span class="content-type-tag">@ct</span>
-                                    }
-                                </div>
-                                <SchemaDisplay Schema="group.Schema" />
-                            </div>
-                        </div>
-                    }
+                    <SchemaContentGroup Content="OpenApiOperation.RequestBody.Content" />
                 </div>
             </div>
         }
@@ -126,27 +104,7 @@ else
                             @if (response.Value.Content?.Any() == true)
                             {
                                 <div class="response-content">
-                                    @{
-                                        var grouped = response.Value.Content
-                                            .Where(c => c.Value.Schema != null)
-                                            .GroupBy(c => c.Value.Schema.Reference?.Id ?? c.Value.Schema.GetHashCode().ToString())
-                                            .Select(g => new {
-                                                ContentTypes = g.Select(x => x.Key).ToList(),
-                                                Schema = g.First().Value.Schema
-                                            });
-                                    }
-                                    @foreach (var group in grouped)
-                                    {
-                                        <div class="content-type-item">
-                                            <div class="content-type-header">
-                                                @foreach (var ct in group.ContentTypes)
-                                                {
-                                                    <span class="content-type-tag">@ct</span>
-                                                }
-                                                <SchemaDisplay Schema="group.Schema" />
-                                            </div>
-                                        </div>
-                                    }
+                                    <SchemaContentGroup Content="response.Value.Content" />
                                 </div>
                             }
                         </div>
