@@ -9,6 +9,13 @@
             <div class="hero-tags">
                 <span class="version-tag">v@(OpenApiDocument.Info.Version)</span>
             </div>
+            @if (OpenApiDocument.Servers != null && OpenApiDocument.Servers.Count > 0)
+            {
+                var url = OpenApiDocument.Servers[0].Url;
+                <div class="api-info-url-full">
+                    @url
+                </div>
+            }
             @if (OpenApiDocument.Info.Description != null)
             {
                 <div class="hero-description">
