@@ -1,4 +1,4 @@
-﻿@inject NavigationManager Navigation
+@inject NavigationManager Navigation
 
 <nav class="sidebar-nav">
     <div class="nav-item">
@@ -20,7 +20,6 @@
                         {
                             <div class="nav-dropdown-item">
                                 <NavLink href="@(operation.OperationId)" class="nav-link">
-                                    <span class="nav-dropdown-icon nav-dropdown-spacer"></span>
                                     <span class="nav-link-text">
                                         @(operation.Summary ?? path)
                                     </span>

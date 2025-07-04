@@ -2,10 +2,11 @@
 @using Drip.Components.TopBar
 @using Drip.Services
 @inject HttpClient HttpClient
-@inject IJSRuntime JsRuntime
+@inject ThemeService ThemeService
 @inject OpenApiService OpenApiService
 @inject OpenApiStateService StateService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="app-container">
     <AppTopBar />
@@ -13,10 +14,11 @@
     <div class="main-content">
         <CascadingValue Value="OpenApiDocument">
             <aside class="sidebar">
-                <SideNav />
+                <Drip.Components.SideBar.AppSideBar />
             </aside>
             
             <main class="content">
+                <div class="content-header">TERMINAL</div>
                 @if (OpenApiDocument is null)
                 {
                     <div class="loading-container">
@@ -72,6 +74,7 @@
     {
         // Subscribe to document changes
         StateService.OnDocumentChanged += HandleDocumentChanged;
+        ThemeService.OnThemeChanged += HandleThemeChanged;
         
         // Load default document if no documents are available
         if (!StateService.AllDocuments.Any())
@@ -88,7 +91,7 @@
     {
         if (firstRender)
         {
-            _currentTheme = await JsRuntime.InvokeAsync<string>("getCurrentTheme");
+            _currentTheme = await ThemeService.GetThemeAsync();
             StateHasChanged();
         }
     }
@@ -96,12 +99,12 @@
     public void Dispose()
     {
         StateService.OnDocumentChanged -= HandleDocumentChanged;
+        ThemeService.OnThemeChanged -= HandleThemeChanged;
     }
 
-    private async Task ToggleTheme()
+    private void HandleThemeChanged(string theme)
     {
-        await JsRuntime.InvokeVoidAsync("toggleTheme");
-        _currentTheme = await JsRuntime.InvokeAsync<string>("getCurrentTheme");
+        _currentTheme = theme;
         StateHasChanged();
     }
 

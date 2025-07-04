@@ -31,12 +31,6 @@
 .nav-dropdown-icon {
     width: 1rem;
     margin-right: var(--spacing-sm);
-    transition: transform var(--transition-normal);
-    transform: rotate(-90deg);
-}
-
-.nav-dropdown.expanded .nav-dropdown-icon {
-    transform: rotate(0deg);
 }
 
 .nav-dropdown-text {
@@ -51,6 +45,8 @@
     padding: var(--spacing-sm) 0;
     margin-top: var(--spacing-xs);
     transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
+    position: relative;
+    
 }
 
 .nav-dropdown.expanded .nav-dropdown-content {

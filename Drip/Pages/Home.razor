@@ -37,12 +37,7 @@
             </div>
         </div>
     </div>
-    
-    <!-- Terminal-style command prompt -->
-    <div class="command-line">
-        <span>drip --help</span>
-    </div>
-    
+
     <div class="api-sections">
         @foreach (var tag in OpenApiDocument.Tags)
         {
@@ -74,7 +69,6 @@
                                     {
                                         <p class="operation-description">@methodItem.Description</p>
                                     }
-                                    <div class="operation-path">@path</div>
                                     
                                     <!-- Terminal-style API command example -->
                                     <div class="api-command">
