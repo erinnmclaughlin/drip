@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore Drip/Drip.csproj
+
+      - name: Build
+        run: dotnet build Drip/Drip.csproj --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish Drip/Drip.csproj --configuration Release --output publish_output --nologo
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./publish_output/wwwroot
+          publish_branch: gh-pages
+          force_orphan: true 
