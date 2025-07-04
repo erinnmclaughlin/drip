@@ -1,32 +1,26 @@
 ﻿.get {
-    --foreground: white;
     --background: #2563EB;
 }
 
 .post {
-    --foreground: white;
     --background: #16A34A;
 }
 
 .put {
-    --foreground: white;
     --background: #D97706;
 }
 
 .patch {
-    --foreground: white;
     --background: #EA580C;
 }
 
 .delete {
-    --foreground: white;
     --background: #DC2626;
 }
 
-
-
 .tag {
-    color: var(--text-primary);
+    color: #fff;
+    background: var(--background);
     display: inline-block;
     font-size: var(--font-size-xs);
     padding: 4px 12px;
@@ -36,44 +30,4 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-family: var(--font-primary);
-}
-
-.get {
-    background: var(--accent-get);
-    color: var(--text-primary);
-}
-
-.post {
-    background: var(--accent-post);
-    color: var(--text-primary);
-}
-
-.put {
-    background: var(--accent-put);
-    color: var(--text-primary);
-}
-
-.patch {
-    background: var(--accent-warning);
-    color: var(--text-primary);
-}
-
-.delete {
-    background: var(--accent-delete);
-    color: var(--text-primary);
-}
-
-.head {
-    background: var(--accent-info);
-    color: var(--text-primary);
-}
-
-.options {
-    background: var(--accent-info);
-    color: var(--text-primary);
-}
-
-.trace {
-    background: var(--accent-info);
-    color: var(--text-primary);
 }

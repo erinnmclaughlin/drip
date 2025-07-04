@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject HttpClient HttpClient
+@inject IJSRuntime JS
 
 <div class="app-container">
     <header class="top-bar">
@@ -8,11 +9,17 @@
                 <strong>drip</strong>
             </div>
             <div class="top-bar-actions">
-                <button type="button" class="icon-button" title="Settings">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-                        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159zM8 5.754a2.246 2.246 0 1 1 0 4.492 2.246 2.246 0 0 1 0-4.492z"/>
-                    </svg>
+                <button type="button" class="icon-button" title="Toggle Light/Dark Mode" @onclick="ToggleTheme">
+                    @if (currentTheme == "light")
+                    {
+                        <!-- Sun icon -->
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    }
+                    else
+                    {
+                        <!-- Moon icon -->
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+                    }
                 </button>
             </div>
         </div>
@@ -85,6 +92,7 @@
 @code {
     private OpenApiDocument? OpenApiDocument { get; set; }
     private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
+    private string currentTheme = "dark";
 
     protected override async Task OnInitializedAsync()
     {
@@ -92,5 +100,13 @@
         //var stream = await HttpClient.GetStreamAsync("museum.yaml"); // 3.1.0 is not currently supported
         OpenApiDocument = new OpenApiStreamReader().Read(stream, out var diagnostic);
         OpenApiDiagnostic = diagnostic;
+        currentTheme = await JS.InvokeAsync<string>("getCurrentTheme");
+    }
+
+    private async Task ToggleTheme()
+    {
+        await JS.InvokeVoidAsync("toggleTheme");
+        currentTheme = await JS.InvokeAsync<string>("getCurrentTheme");
+        StateHasChanged();
     }
 }
