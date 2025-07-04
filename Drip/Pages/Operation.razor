@@ -67,7 +67,16 @@ else
                     {
                         <div class="response-item">
                             <div class="response-header">
-                                <span class="response-code">@response.Key</span>
+                                <span class="response-code">
+                                    @if (response.Key == "default")
+                                    {
+                                        <text>500</text>
+                                    }
+                                    else
+                                    {
+                                        <text>@response.Key</text>
+                                    }
+                                </span>
                                 <span class="response-description">@response.Value.Description</span>
                             </div>
                         </div>

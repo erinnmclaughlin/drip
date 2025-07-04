@@ -3,6 +3,8 @@
     justify-content: center;
     align-items: center;
     min-height: 400px;
+    max-width: var(--main-content-max-width);
+    margin: 0 auto;
 }
 
 .error-card {
@@ -42,7 +44,8 @@
 }
 
 .operation-detail {
-    max-width: 100%;
+    max-width: var(--main-content-max-width);
+    margin: 0 auto;
 }
 
 .operation-header {
