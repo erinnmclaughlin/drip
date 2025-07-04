@@ -1,0 +1,29 @@
+<div class="schema-tree">
+    <div>{</div>
+    <div style="margin-left: 1rem;">
+        @foreach (var (property, value) in Schema.Properties)
+        {
+            if (value.Type == "object")
+            {
+                <div>@property: <SchemaTree Schema="value" /></div>
+            }
+            else if (value.Type == "array")
+            {
+                <div>@property: []</div>
+            }
+            else
+            {
+                <div>@property: @value.Type</div>
+            }
+        }
+    </div>
+    <div>}</div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required OpenApiSchema Schema { get; set; }
+
+    [CascadingParameter]
+    public required OpenApiDocument Document { get; set; }
+}

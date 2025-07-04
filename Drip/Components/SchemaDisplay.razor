@@ -1,0 +1,14 @@
+@using Microsoft.OpenApi.Models
+
+<div class="schema-display">
+
+    @if (Schema?.Type == "object")
+    {
+        <SchemaTree Schema="Schema" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public OpenApiSchema? Schema { get; set; }
+} 
