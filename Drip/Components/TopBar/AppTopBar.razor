@@ -4,13 +4,22 @@
 
 <header class="top-bar">
     <div class="top-bar-content">
-        <div class="logo">
-            <NavLink href="" class="logo-link">
-                <span class="icon">
-                    <Raindrop />
-                </span>
-                <strong>drip</strong>
-            </NavLink>
+        <div class="top-bar-left">
+            <button class="hamburger-btn" @onclick="ToggleSidebar" aria-label="Toggle sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="logo">
+                <NavLink href="" class="logo-link">
+                    <span class="icon">
+                        <Raindrop />
+                    </span>
+                    <strong>drip</strong>
+                </NavLink>
+            </div>
         </div>
         <div class="top-bar-actions">
             @if (StateService.HasDocument)
@@ -18,7 +27,7 @@
                 <DocumentSelector />
             }
             <NavLink href="upload" class="upload-link" title="Upload OpenAPI Document">
-                Upload a Document
+                <span class="upload-text">Upload a Document</span>
             </NavLink>
             <button type="button" class="icon-button" title="Toggle Light/Dark Mode" aria-label="Toggle Light/Dark Mode" @onclick="ThemeService.ToggleThemeAsync">
                 @if (_currentTheme == "light")
@@ -49,6 +58,12 @@
 @code {
     private string _currentTheme = "light";
 
+    [Parameter]
+    public bool SidebarOpen { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> SidebarOpenChanged { get; set; }
+
     public void Dispose()
     {
         ThemeService.OnThemeChanged -= HandleThemeChanged;
@@ -65,6 +80,11 @@
         {
             _currentTheme = await ThemeService.GetThemeAsync();
         }
+    }
+
+    private async Task ToggleSidebar()
+    {
+        await SidebarOpenChanged.InvokeAsync(!SidebarOpen);
     }
 
     private void HandleThemeChanged(string theme)

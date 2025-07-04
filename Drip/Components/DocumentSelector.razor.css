@@ -297,4 +297,140 @@ body.dark .document-item.active {
 }
 
 /* Remove .active-dot styles if present */
-.active-dot { display: none !important; } 
+.active-dot { display: none; }
+
+/* Mobile styles for sidebar usage */
+@media (max-width: 768px) {
+    /* Hide when in top bar context */
+    .top-bar .document-selector-toggle {
+        display: none;
+    }
+    
+    /* Show when in sidebar context */
+    .sidebar .document-selector {
+        width: 100%;
+    }
+    
+    .sidebar .document-selector-toggle {
+        width: 100%;
+        min-width: auto;
+        max-width: none;
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+        border-radius: var(--radius-sm);
+        min-height: 44px;
+    }
+    
+    .sidebar .document-selector-text {
+        font-size: var(--font-size-sm);
+    }
+    
+    .sidebar .document-selector-content {
+        width: 100%;
+        min-width: auto;
+        max-width: none;
+        left: 0;
+        right: 0;
+        border-radius: var(--radius-sm);
+        max-height: 300px;
+    }
+    
+    .sidebar .document-selector-header {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+    }
+    
+    .sidebar .document-selector-title {
+        font-size: var(--font-size-sm);
+    }
+    
+    .sidebar .document-count {
+        font-size: 10px;
+        padding: 1px 6px;
+    }
+    
+    .sidebar .document-item {
+        padding: var(--spacing-sm);
+        margin: 2px var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        min-height: 44px;
+    }
+    
+    .sidebar .document-name {
+        font-size: var(--font-size-sm);
+    }
+    
+    .sidebar .document-source {
+        font-size: 11px;
+    }
+    
+    .sidebar .document-remove-btn {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+    }
+    
+    .sidebar .document-remove-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Show when in sidebar context */
+    .sidebar .document-selector-toggle {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+        min-height: 48px;
+        border-radius: var(--radius-md);
+    }
+    
+    .sidebar .document-selector-content {
+        max-height: 250px;
+        border-radius: var(--radius-sm);
+    }
+    
+    .sidebar .document-selector-header {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+    
+    .sidebar .document-item {
+        padding: var(--spacing-sm);
+        margin: 1px var(--spacing-sm);
+        min-height: 48px;
+        border-radius: var(--radius-sm);
+    }
+    
+    .sidebar .document-name {
+        font-size: var(--font-size-sm);
+        line-height: 1.4;
+    }
+    
+    .sidebar .document-source {
+        font-size: 10px;
+        line-height: 1.3;
+    }
+    
+    .sidebar .document-remove-btn {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        min-height: 32px;
+    }
+    
+    .sidebar .document-remove-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* Improve touch interaction */
+    .sidebar .document-item:active {
+        transform: scale(0.98);
+    }
+    
+    .sidebar .document-remove-btn:active {
+        transform: scale(0.9);
+    }
+} 
