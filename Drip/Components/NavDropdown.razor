@@ -1,7 +1,7 @@
 @using Microsoft.OpenApi.Models
 
 <div class="nav-item">
-    <div class="nav-dropdown @(IsExpanded ? "expanded" : "")" id="nav-dropdown-@Index">
+    <div class="nav-dropdown @(IsExpanded ? "expanded" : "")">
         <button type="button" class="nav-dropdown-toggle @(HasActiveOperation ? "active" : "")" @onclick="ToggleDropdown">
             <span class="nav-dropdown-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -22,7 +22,6 @@
 
     [Parameter] public required string ButtonText { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public int Index { get; set; }
     [Parameter] public bool HasActiveOperation { get; set; }
 
     protected override void OnParametersSet()

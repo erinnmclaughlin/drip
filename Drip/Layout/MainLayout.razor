@@ -58,7 +58,7 @@
                     var tag = OpenApiDocument.Tags.ElementAt(i);
                     var hasActiveOperation = HasActiveOperationInTag(tag);
                     
-                    <NavDropdown ButtonText="@tag.Name" Index="@index" HasActiveOperation="@hasActiveOperation">
+                    <NavDropdown ButtonText="@tag.Name" HasActiveOperation="@hasActiveOperation">
                         @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
                         {
                             foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Any(t => t.Name == tag.Name)))
