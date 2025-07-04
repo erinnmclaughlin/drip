@@ -19,17 +19,170 @@
 }
 
 .tag {
-    color: #fff;
-    background: var(--background);
     display: inline-block;
-    font-size: var(--font-size-xs);
-    padding: 4px 8px;
-    line-height: 1;
+    padding: 2px 6px;
     border-radius: var(--radius-sm);
-    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-family: var(--font-primary);
-    width: 56px;
-    text-align: center;
+    font-family: var(--font-monospace);
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+}
+
+.tag::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    background: currentColor;
+}
+
+/* GET method */
+.tag.get {
+    background: rgba(88, 166, 255, 0.1);
+    color: var(--accent-get);
+    border-color: var(--accent-get);
+    box-shadow: var(--glow-primary);
+}
+
+.tag.get::after {
+    content: "🔵";
+    margin-left: 2px;
+    font-size: 8px;
+}
+
+/* POST method */
+.tag.post {
+    background: rgba(126, 231, 135, 0.1);
+    color: var(--accent-post);
+    border-color: var(--accent-post);
+    box-shadow: var(--glow-success);
+}
+
+.tag.post::after {
+    content: "🟢";
+    margin-left: 2px;
+    font-size: 8px;
+}
+
+/* PUT method */
+.tag.put {
+    background: rgba(240, 136, 62, 0.1);
+    color: var(--accent-put);
+    border-color: var(--accent-put);
+    box-shadow: var(--glow-warning);
+}
+
+.tag.put::after {
+    content: "🟡";
+    margin-left: 2px;
+    font-size: 8px;
+}
+
+/* DELETE method */
+.tag.delete {
+    background: rgba(248, 81, 73, 0.1);
+    color: var(--accent-delete);
+    border-color: var(--accent-delete);
+    box-shadow: var(--glow-error);
+}
+
+.tag.delete::after {
+    content: "🔴";
+    margin-left: 2px;
+    font-size: 8px;
+}
+
+/* PATCH method */
+.tag.patch {
+    background: rgba(210, 168, 255, 0.1);
+    color: var(--accent-patch);
+    border-color: var(--accent-patch);
+    box-shadow: 0 0 8px rgba(210, 168, 255, 0.3);
+}
+
+.tag.patch::after {
+    content: "🟣";
+    margin-left: 2px;
+    font-size: 8px;
+}
+
+/* HEAD method */
+.tag.head {
+    background: rgba(88, 166, 255, 0.1);
+    color: var(--accent-info);
+    border-color: var(--accent-info);
+    box-shadow: var(--glow-primary);
+}
+
+.tag.head::after {
+    content: "🔵";
+    margin-left: 2px;
+    font-size: 8px;
+}
+
+/* OPTIONS method */
+.tag.options {
+    background: rgba(126, 231, 135, 0.1);
+    color: var(--accent-success);
+    border-color: var(--accent-success);
+    box-shadow: var(--glow-success);
+}
+
+.tag.options::after {
+    content: "🟢";
+    margin-left: 2px;
+    font-size: 8px;
+}
+
+/* TRACE method */
+.tag.trace {
+    background: rgba(240, 136, 62, 0.1);
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+    box-shadow: var(--glow-warning);
+}
+
+.tag.trace::after {
+    content: "🟡";
+    margin-left: 2px;
+    font-size: 8px;
+}
+
+/* Terminal-style hover effects */
+.tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Terminal-style animations */
+@keyframes tag-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.tag.active {
+    animation: tag-pulse 2s infinite;
+}
+
+/* Responsive terminal tags */
+@media (max-width: 768px) {
+    .tag {
+        font-size: 10px;
+        padding: 1px 4px;
+    }
+    
+    .tag::after {
+        font-size: 6px;
+    }
 }

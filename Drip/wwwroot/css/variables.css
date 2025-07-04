@@ -1,49 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..900&family=Fira+Code:wght@300..700&display=swap');
 
 :root {
-    /* Background Colors */
-    --background-primary: #1a1a1a;
-    --background-secondary: #242424;
-    --background-tertiary: #2d2d2d;
-    --background-code-block: #0d0d0d;
-    --background-hover: #333333;
+    /* Terminal-like Background Colors */
+    --background-primary: #0d1117;
+    --background-secondary: #161b22;
+    --background-tertiary: #21262d;
+    --background-code-block: #0d1117;
+    --background-hover: #30363d;
+    --background-panel: #161b22;
     
-    /* Text Colors */
-    --text-primary: #ffffff;
-    --text-secondary: #b3b3b3;
-    --text-muted: #808080;
-    --text-link: #61affe;
-    --text-code: #e6e6e6;
+    /* Terminal Text Colors */
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --text-muted: #484f58;
+    --text-link: #58a6ff;
+    --text-code: #e6edf3;
+    --text-success: #7ee787;
+    --text-warning: #f85149;
+    --text-error: #f85149;
     
-    /* Accent Colors */
-    --accent-success: #49cc90;
-    --accent-error: #f93e3e;
-    --accent-warning: #fca130;
-    --accent-info: #61affe;
-    --accent-primary: #61affe;
-    --accent-secondary: #fca130;
+    /* Terminal Accent Colors - Bright and vibrant */
+    --accent-success: #7ee787;
+    --accent-error: #f85149;
+    --accent-warning: #f0883e;
+    --accent-info: #58a6ff;
+    --accent-primary: #58a6ff;
+    --accent-secondary: #f0883e;
+    --accent-get: #58a6ff;
+    --accent-post: #7ee787;
+    --accent-put: #f0883e;
+    --accent-delete: #f85149;
+    --accent-patch: #d2a8ff;
     
-    /* Tag Colors */
-    --tag-beta: #ff6b6b;
-    --tag-new: #4ecdc4;
+    /* Terminal-style Tag Colors */
+    --tag-beta: #f85149;
+    --tag-new: #7ee787;
     
-    /* Border Colors */
-    --border-default: #404040;
-    --border-light: #333333;
-    --border-focus: #61affe;
+    /* Terminal Border Colors */
+    --border-default: #30363d;
+    --border-light: #21262d;
+    --border-focus: #58a6ff;
+    --border-terminal: #30363d;
     
-    /* Typography */
-    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-monospace: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+    /* Terminal Typography - Monospace throughout */
+    --font-primary: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+    --font-monospace: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
     
-    /* Font Sizes */
+    /* Terminal Font Sizes */
     --font-size-xs: 11px;
-    --font-size-sm: 13px;
-    --font-size-base: 14px;
-    --font-size-md: 16px;
-    --font-size-lg: 18px;
-    --font-size-xl: 24px;
-    --font-size-2xl: 32px;
+    --font-size-sm: 12px;
+    --font-size-base: 13px;
+    --font-size-md: 14px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 24px;
     
     /* Font Weights */
     --font-weight-normal: 400;
@@ -52,47 +62,53 @@
     --font-weight-bold: 700;
     
     /* Line Heights */
-    --line-height-tight: 1.2;
+    --line-height-tight: 1.3;
     --line-height-normal: 1.5;
-    --line-height-relaxed: 1.8;
+    --line-height-relaxed: 1.7;
     
-    /* Spacing */
+    /* Terminal Spacing */
     --spacing-xs: 4px;
     --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    --spacing-2xl: 48px;
-    --spacing-3xl: 64px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 48px;
     
-    /* Layout */
-    --sidebar-width: 320px;
-    --sidebar-background: #1a1a1a;
-    --sidebar-border-right: 1px solid #404040;
-    --sidebar-padding: 16px;
+    /* Terminal Layout */
+    --sidebar-width: 280px;
+    --sidebar-background: #0d1117;
+    --sidebar-border-right: 1px solid #30363d;
+    --sidebar-padding: 12px;
     
-    --main-content-max-width: 1200px;
-    --main-content-padding: 32px;
-    --main-content-background: #242424;
+    --main-content-max-width: 1400px;
+    --main-content-padding: 20px;
+    --main-content-background: #0d1117;
     
-    --container-padding: 0 24px;
+    --container-padding: 0 16px;
     --container-margin: 0 auto;
     
-    /* Border Radius */
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 8px;
-    --radius-xl: 12px;
+    /* Terminal Border Radius - Minimal */
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 6px;
+    --radius-xl: 8px;
     --radius-full: 9999px;
     
-    /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.25);
+    /* Terminal Shadows - Subtle */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.8);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.4);
+    
+    /* Terminal Glow Effects */
+    --glow-primary: 0 0 8px rgba(88, 166, 255, 0.3);
+    --glow-success: 0 0 8px rgba(126, 231, 135, 0.3);
+    --glow-warning: 0 0 8px rgba(240, 136, 62, 0.3);
+    --glow-error: 0 0 8px rgba(248, 81, 73, 0.3);
     
     /* Transitions */
-    --transition-fast: 0.15s ease;
+    --transition-fast: 0.1s ease;
     --transition-normal: 0.2s ease;
     --transition-slow: 0.3s ease;
     
@@ -101,6 +117,12 @@
     --z-modal: 2000;
     --z-tooltip: 3000;
     --z-notification: 4000;
+    
+    /* Terminal-specific variables */
+    --terminal-cursor: #58a6ff;
+    --terminal-selection: rgba(88, 166, 255, 0.2);
+    --terminal-scrollbar: #30363d;
+    --terminal-scrollbar-thumb: #484f58;
     
     /* Legacy compatibility */
     --background: var(--background-primary);
@@ -143,88 +165,100 @@
 }
 
 .light {
-    --background-primary: #f8f9fa;
+    /* Light terminal theme - still terminal-like but lighter */
+    --background-primary: #f6f8fa;
     --background-secondary: #ffffff;
-    --background-tertiary: #f3f4f6;
-    --background-code-block: #ececec;
-    --background-hover: #e9ecef;
+    --background-tertiary: #f1f3f4;
+    --background-code-block: #f6f8fa;
+    --background-hover: #e1e4e8;
+    --background-panel: #ffffff;
 
-    --text-primary: #18181a;
-    --text-secondary: #444444;
-    --text-muted: #888888;
-    --text-link: #0d47a1;
-    --text-code: #18181a;
+    --text-primary: #24292f;
+    --text-secondary: #656d76;
+    --text-muted: #8c959f;
+    --text-link: #0969da;
+    --text-code: #24292f;
+    --text-success: #1a7f37;
+    --text-warning: #9a6700;
+    --text-error: #cf222e;
 
-    --accent-success: #2e7d32;
-    --accent-error: #b71c1c;
-    --accent-warning: #b26a00;
-    --accent-info: #1565c0;
-    --accent-primary: #1565c0;
-    --accent-secondary: #b26a00;
-    --accent-get: #1565c0;
-    --accent-post: #2e7d32;
-    --accent-put: #b26a00;
-    --accent-delete: #b71c1c;
+    --accent-success: #1a7f37;
+    --accent-error: #cf222e;
+    --accent-warning: #9a6700;
+    --accent-info: #0969da;
+    --accent-primary: #0969da;
+    --accent-secondary: #9a6700;
+    --accent-get: #0969da;
+    --accent-post: #1a7f37;
+    --accent-put: #9a6700;
+    --accent-delete: #cf222e;
+    --accent-patch: #8250df;
 
-    --tag-beta: #b71c1c;
-    --tag-new: #00838f;
+    --tag-beta: #cf222e;
+    --tag-new: #1a7f37;
 
-    --border-default: #e0e0e0;
-    --border-light: #cccccc;
-    --border-focus: #1976d2;
+    --border-default: #d0d7de;
+    --border-light: #d0d7de;
+    --border-focus: #0969da;
+    --border-terminal: #d0d7de;
 
-    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-monospace: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+    --font-primary: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+    --font-monospace: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
 
     --font-size-xs: 11px;
-    --font-size-sm: 13px;
-    --font-size-base: 14px;
-    --font-size-md: 16px;
-    --font-size-lg: 18px;
-    --font-size-xl: 24px;
-    --font-size-2xl: 32px;
+    --font-size-sm: 12px;
+    --font-size-base: 13px;
+    --font-size-md: 14px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 24px;
 
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
 
-    --line-height-tight: 1.2;
+    --line-height-tight: 1.3;
     --line-height-normal: 1.5;
-    --line-height-relaxed: 1.8;
+    --line-height-relaxed: 1.7;
 
     --spacing-xs: 4px;
     --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    --spacing-2xl: 48px;
-    --spacing-3xl: 64px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 48px;
 
-    --sidebar-width: 320px;
-    --sidebar-background: #f8f9fa;
-    --sidebar-border-right: 1px solid #e0e0e0;
-    --sidebar-padding: 16px;
+    --sidebar-width: 280px;
+    --sidebar-background: #f6f8fa;
+    --sidebar-border-right: 1px solid #d0d7de;
+    --sidebar-padding: 12px;
 
-    --main-content-max-width: 1200px;
-    --main-content-padding: 32px;
-    --main-content-background: #ffffff;
+    --main-content-max-width: 1400px;
+    --main-content-padding: 20px;
+    --main-content-background: #f6f8fa;
 
-    --container-padding: 0 24px;
+    --container-padding: 0 16px;
     --container-margin: 0 auto;
 
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 8px;
-    --radius-xl: 12px;
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 6px;
+    --radius-xl: 8px;
     --radius-full: 9999px;
 
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.10);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.07);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.1);
 
-    --transition-fast: 0.15s ease;
+    --glow-primary: 0 0 8px rgba(9, 105, 218, 0.2);
+    --glow-success: 0 0 8px rgba(26, 127, 55, 0.2);
+    --glow-warning: 0 0 8px rgba(154, 103, 0, 0.2);
+    --glow-error: 0 0 8px rgba(207, 34, 46, 0.2);
+
+    --transition-fast: 0.1s ease;
     --transition-normal: 0.2s ease;
     --transition-slow: 0.3s ease;
 
@@ -232,6 +266,48 @@
     --z-modal: 2000;
     --z-tooltip: 3000;
     --z-notification: 4000;
-    --parameter-type-color: #0d47a1;
-    --parameter-type-background: #bbdefb;
+
+    --terminal-cursor: #0969da;
+    --terminal-selection: rgba(9, 105, 218, 0.1);
+    --terminal-scrollbar: #d0d7de;
+    --terminal-scrollbar-thumb: #8c959f;
+
+    /* Legacy compatibility */
+    --background: var(--background-primary);
+    --foreground: var(--text-primary);
+    --card: var(--background-tertiary);
+    --card-foreground: var(--text-primary);
+    --popover: var(--background-secondary);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent-info);
+    --primary-foreground: var(--text-primary);
+    --secondary: var(--background-secondary);
+    --secondary-foreground: var(--text-secondary);
+    --muted: var(--background-tertiary);
+    --muted-foreground: var(--text-muted);
+    --accent: var(--background-hover);
+    --accent-foreground: var(--text-primary);
+    --destructive: var(--accent-error);
+    --destructive-foreground: var(--text-primary);
+    --border: var(--border-default);
+    --input: var(--background-primary);
+    --ring: var(--border-focus);
+    --sidebar: var(--sidebar-background);
+    --sidebar-foreground: var(--text-primary);
+    --sidebar-primary: var(--accent-info);
+    --sidebar-primary-foreground: var(--text-primary);
+    --sidebar-accent: var(--background-hover);
+    --sidebar-accent-foreground: var(--text-primary);
+    --sidebar-border: var(--border-default);
+    --sidebar-ring: var(--border-focus);
+    --font-sans: var(--font-primary);
+    --font-mono: var(--font-monospace);
+    --radius: var(--radius-md);
+    --shadow-xs: var(--shadow-sm);
+    --shadow-2xs: var(--shadow-sm);
+    --shadow: var(--shadow-md);
+    --shadow-2xl: var(--shadow-xl);
+    --spacing: var(--spacing-xs);
+    --parameter-type-color: #1565c0;
+    --parameter-type-background: #e3f2fd;
 }

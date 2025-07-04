@@ -75,6 +75,35 @@
             </main>
         </CascadingValue>
     </div>
+    
+    <!-- Terminal-style status bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <div class="status-item">
+                <span>DRIP</span>
+            </div>
+            @if (OpenApiDocument != null)
+            {
+                <div class="status-item">
+                    <span>@OpenApiDocument.Info.Title v@(OpenApiDocument.Info.Version)</span>
+                </div>
+                <div class="status-item">
+                    <span>@OpenApiDocument.Paths.Count endpoints</span>
+                </div>
+            }
+        </div>
+        <div class="status-right">
+            <div class="status-item">
+                <span>@_currentTheme.ToUpper()</span>
+            </div>
+            <div class="status-item">
+                <span>@DateTime.Now.ToString("HH:mm")</span>
+            </div>
+            <div class="status-item">
+                <span>@(OpenApiDocument != null ? "READY" : "LOADING")</span>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {

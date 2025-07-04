@@ -22,7 +22,25 @@
                     @((MarkupString)RenderMarkdownWithLinksNewTab(OpenApiDocument.Info.Description))
                 </div>
             }
+            
+            <!-- Terminal-style status indicators -->
+            <div class="status-indicators">
+                <div class="status-indicator">
+                    <span>@OpenApiDocument.Paths.Count endpoints available</span>
+                </div>
+                <div class="status-indicator">
+                    <span>@OpenApiDocument.Tags.Count categories</span>
+                </div>
+                <div class="status-indicator">
+                    <span>API Documentation Ready</span>
+                </div>
+            </div>
         </div>
+    </div>
+    
+    <!-- Terminal-style command prompt -->
+    <div class="command-line">
+        <span>drip --help</span>
     </div>
     
     <div class="api-sections">
@@ -57,6 +75,11 @@
                                         <p class="operation-description">@methodItem.Description</p>
                                     }
                                     <div class="operation-path">@path</div>
+                                    
+                                    <!-- Terminal-style API command example -->
+                                    <div class="api-command">
+                                        @method.ToString().ToUpper() @(OpenApiDocument.Servers?.FirstOrDefault()?.Url ?? "")@path
+                                    </div>
                                 </div>
                             </a>
                         }

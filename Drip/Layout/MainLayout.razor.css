@@ -3,6 +3,7 @@
     flex-direction: column;
     height: 100vh;
     background: var(--background-primary);
+    font-family: var(--font-primary);
 }
 
 .top-bar {
@@ -13,11 +14,13 @@
     top: 0;
     z-index: var(--z-dropdown);
     width: 100%;
-    background: var(--background-primary);
+    background: var(--background-secondary);
     color: var(--text-primary);
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 2px solid var(--border-terminal);
+    font-family: var(--font-monospace);
+    font-size: var(--font-size-sm);
     box-shadow: var(--shadow-sm);
-    border-bottom: 1px solid var(--border-default);
 }
 
 .top-bar-content {
@@ -31,6 +34,16 @@
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
     color: var(--text-primary);
+    font-family: var(--font-monospace);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.logo::before {
+    content: ">";
+    color: var(--accent-success);
+    font-weight: var(--font-weight-bold);
 }
 
 .top-bar-actions {
@@ -45,18 +58,24 @@
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     background-color: var(--accent-info);
-    color: white;
-    border-radius: 8px;
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
     text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-monospace);
+    transition: all var(--transition-normal);
+    border: 1px solid var(--accent-info);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 ::deep .upload-link:hover {
     background: var(--accent-get);
-    color: white;
+    color: var(--text-primary);
     text-decoration: none;
+    box-shadow: var(--glow-primary);
+    transform: translateY(-1px);
 }
 
 .default-doc-button {
@@ -67,23 +86,28 @@
     background: var(--background-tertiary);
     color: var(--text-primary);
     border: 1px solid var(--border-default);
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-monospace);
+    transition: all var(--transition-normal);
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .default-doc-button:hover {
     background: var(--background-hover);
-    border-color: var(--border-light);
+    border-color: var(--border-focus);
+    box-shadow: var(--glow-primary);
+    transform: translateY(-1px);
 }
 
 .icon-button {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-lg);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,36 +116,78 @@
     color: var(--text-secondary);
     transition: all var(--transition-normal);
     cursor: pointer;
+    font-family: var(--font-monospace);
 }
 
 .icon-button:hover {
     background: var(--background-hover);
     border-color: var(--border-focus);
     color: var(--text-primary);
+    box-shadow: var(--glow-primary);
+    transform: translateY(-1px);
 }
 
 .main-content {
     display: flex;
     flex: 1;
     overflow: hidden;
+    background: var(--background-primary);
 }
 
 .sidebar {
     width: var(--sidebar-width);
     background: var(--sidebar-background);
-    border-right: var(--sidebar-border-right);
+    border-right: 2px solid var(--border-terminal);
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     transition: width 0.25s var(--transition-normal), min-width 0.25s var(--transition-normal), max-width 0.25s var(--transition-normal), background 0.2s;
+    position: relative;
+}
+
+.sidebar::before {
+    content: "EXPLORER";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--background-secondary);
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-bottom: 1px solid var(--border-default);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--font-monospace);
 }
 
 .content {
     flex: 1;
     background: var(--main-content-background);
     padding: var(--main-content-padding);
+    padding-bottom: calc(var(--main-content-padding) + 32px); /* Account for status bar */
     overflow-y: auto;
     width: 100%;
+    position: relative;
+}
+
+.content::before {
+    content: "TERMINAL";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--background-secondary);
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-bottom: 1px solid var(--border-default);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--font-monospace);
+    z-index: 1;
 }
 
 .loading-container {
@@ -131,6 +197,7 @@
     justify-content: center;
     height: 100%;
     gap: var(--spacing-lg);
+    font-family: var(--font-monospace);
 }
 
 .loading-spinner {
@@ -145,6 +212,14 @@
 .loading-text {
     color: var(--text-secondary);
     font-size: var(--font-size-md);
+    font-family: var(--font-monospace);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.loading-text::before {
+    content: "Loading ";
+    color: var(--accent-info);
 }
 
 @keyframes spin {
@@ -161,9 +236,139 @@
     text-decoration: none;
     display: flex;
     align-items: center;
+    font-family: var(--font-monospace);
 }
 
 ::deep .logo-raindrop {
     vertical-align: middle;
     margin-right: 8px;
+}
+
+/* Terminal-style status bar */
+.status-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--background-secondary);
+    border-top: 1px solid var(--border-terminal);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: var(--font-monospace);
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: var(--z-dropdown);
+}
+
+.status-left {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.status-right {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.status-item::before {
+    content: "●";
+    color: var(--accent-success);
+    font-size: 8px;
+}
+
+/* Terminal-style tabs */
+.terminal-tabs {
+    display: flex;
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--border-default);
+    font-family: var(--font-monospace);
+    font-size: var(--font-size-sm);
+}
+
+.terminal-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--background-tertiary);
+    border-right: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.terminal-tab.active {
+    background: var(--background-primary);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--accent-info);
+}
+
+.terminal-tab:hover {
+    background: var(--background-hover);
+    color: var(--text-primary);
+}
+
+.terminal-tab::before {
+    content: "●";
+    margin-right: var(--spacing-xs);
+    font-size: 8px;
+    color: var(--accent-success);
+}
+
+.terminal-tab.active::before {
+    color: var(--accent-info);
+}
+
+/* Terminal-style command line */
+.command-line {
+    background: var(--background-code-block);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
+    font-family: var(--font-monospace);
+    font-size: var(--font-size-sm);
+    color: var(--text-code);
+    position: relative;
+}
+
+.command-line::before {
+    content: "$ ";
+    color: var(--accent-success);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Responsive design for terminal */
+@media (max-width: 768px) {
+    .top-bar {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+    
+    .logo {
+        font-size: var(--font-size-md);
+    }
+    
+    .sidebar {
+        width: 240px;
+    }
+    
+    .content {
+        padding: var(--spacing-sm);
+    }
+    
+    ::deep .upload-link {
+        padding: 0.4rem 0.8rem;
+        font-size: var(--font-size-xs);
+    }
+    
+    .icon-button {
+        width: 32px;
+        height: 32px;
+    }
 }
