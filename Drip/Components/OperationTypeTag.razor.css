@@ -23,11 +23,13 @@
     background: var(--background);
     display: inline-block;
     font-size: var(--font-size-xs);
-    padding: 4px 12px;
+    padding: 4px 8px;
     line-height: 1;
     border-radius: var(--radius-sm);
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-family: var(--font-primary);
+    width: 56px;
+    text-align: center;
 }
