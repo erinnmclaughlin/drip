@@ -22,7 +22,7 @@ jobs:
         run: dotnet workload install wasm-tools
 
       - name: Publish
-        run: dotnet publish ./Drip/Drip.csproj -c:Release -p:GHPages=true -o dist --nologo
+        run: dotnet publish ./Drip.Demo/Drip.Demo.csproj -c:Release -p:GHPages=true -o dist --nologo
       
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
