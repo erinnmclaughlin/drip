@@ -2,9 +2,9 @@
 @using Drip.Services
 @inject HttpClient HttpClient
 @inject IJSRuntime JsRuntime
-@inject NavigationManager Navigation
 @inject OpenApiService OpenApiService
 @inject OpenApiStateService StateService
+@inject NavigationManager NavigationManager
 
 <div class="app-container">
     <header class="top-bar">
@@ -31,13 +31,8 @@
                         <span>Default</span>
                     </button>
                 }
-                <NavLink href="/upload" class="upload-link" title="Upload OpenAPI Document">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="7,10 12,15 17,10"/>
-                        <line x1="12" y1="15" x2="12" y2="3"/>
-                    </svg>
-                    <span>Upload</span>
+                <NavLink href="upload" class="upload-link" title="Upload OpenAPI Document">
+                    Upload a Document
                 </NavLink>
                 <button type="button" class="icon-button" title="Toggle Light/Dark Mode" aria-label="Toggle Light/Dark Mode" @onclick="ToggleTheme">
                     @if (_currentTheme == "light")
@@ -66,60 +61,25 @@
     </header>
     
     <div class="main-content">
-        <aside class="sidebar">
-            <nav class="sidebar-nav">
-                <div class="nav-item">
-                    <NavLink Match="NavLinkMatch.All" href="" class="nav-link">
-                        <span class="nav-link-text">Home</span>
-                    </NavLink>
-                </div>
-                @if (OpenApiDocument is not null)
+        <CascadingValue Value="OpenApiDocument">
+            <aside class="sidebar">
+                <SideNav />
+            </aside>
+            
+            <main class="content">
+                @if (OpenApiDocument is null)
                 {
-                    @foreach (var tag in OpenApiDocument.Tags)
-                    {
-                        var hasActiveOperation = HasActiveOperationInTag(tag.Name);
-                    
-                        <div class="nav-item">
-                            <NavDropdown ButtonText="@tag.Name" HasActiveOperation="@hasActiveOperation">
-                                @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
-                                {
-                                    foreach (var (operationType, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
-                                    {
-                                        <div class="nav-dropdown-item">
-                                            <NavLink href="@(operation.OperationId)" class="nav-link">
-                                                <span class="nav-dropdown-icon nav-dropdown-spacer"></span>
-                                                <span class="nav-link-text">
-                                                    @(operation.Summary ?? path)
-                                                </span>
-                                                <span class="nav-link-method">
-                                                    <OperationTypeTag OperationType="operationType"/>
-                                                </span>
-                                            </NavLink>
-                                        </div>
-                                    }
-                                }
-                            </NavDropdown>
-                        </div>
-                    }
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text">Loading API documentation...</p>
+                    </div>
                 }
-            </nav>
-        </aside>
-        
-        <main class="content">
-            @if (OpenApiDocument is null)
-            {
-                <div class="loading-container">
-                    <div class="loading-spinner"></div>
-                    <p class="loading-text">Loading API documentation...</p>
-                </div>
-            }
-            else
-            {
-                <CascadingValue Value="OpenApiDocument">
+                else
+                {
                     @Body
-                </CascadingValue>
-            }
-        </main>
+                }
+            </main>
+        </CascadingValue>
     </div>
 </div>
 
@@ -172,41 +132,13 @@
         if (document != null)
         {
             StateService.SetDocument(document, "default");
+            NavigationManager.NavigateTo("");
         }
     }
 
-    private async void HandleDocumentChanged()
+    private void HandleDocumentChanged()
     {
-        OpenApiDocument = null;
-        StateHasChanged();
-        
-        await Task.Delay(100);
-
         OpenApiDocument = StateService.CurrentDocument;
         StateHasChanged();
-    }
-
-    private bool IsActiveOperation(string operationId)
-    {
-        var currentUri = Navigation.Uri;
-        var segments = currentUri.Split('/', StringSplitOptions.RemoveEmptyEntries);
-        return segments.Length > 0 && segments[^1] == operationId;
-    }
-
-    private bool HasActiveOperationInTag(string tag)
-    {
-        if (OpenApiDocument?.Paths == null) return false;
-        
-        foreach (var (_, pathItem) in OpenApiDocument.Paths)
-        {
-            foreach (var (_, operation) in pathItem.Operations.Where(o => o.Value.Tags.Any(t => t.Name == tag)))
-            {
-                if (IsActiveOperation(operation.OperationId))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

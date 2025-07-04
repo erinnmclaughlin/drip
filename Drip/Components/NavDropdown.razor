@@ -14,14 +14,24 @@
 
 @code {
 
+    private OpenApiDocument? _openApiDocument;
     private bool IsExpanded { get; set; }
 
     [Parameter] public required string ButtonText { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool HasActiveOperation { get; set; }
+    
+    [CascadingParameter]
+    public OpenApiDocument? OpenApiDocument { get; set; }
 
     protected override void OnParametersSet()
     {
+        if (_openApiDocument != OpenApiDocument)
+        {
+            _openApiDocument = OpenApiDocument;
+            IsExpanded = false;
+        }
+        
         if (HasActiveOperation)
             IsExpanded = true;
     }

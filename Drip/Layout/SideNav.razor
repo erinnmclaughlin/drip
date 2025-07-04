@@ -1,0 +1,65 @@
+﻿@inject NavigationManager Navigation
+
+<nav class="sidebar-nav">
+    <div class="nav-item">
+        <NavLink Match="NavLinkMatch.All" href="" class="nav-link">
+            <span class="nav-link-text">Home</span>
+        </NavLink>
+    </div>
+    @if (OpenApiDocument is not null)
+    {
+        @foreach (var tag in OpenApiDocument.Tags)
+        {
+            var hasActiveOperation = HasActiveOperationInTag(tag.Name);
+        
+            <div class="nav-item">
+                <NavDropdown ButtonText="@tag.Name" HasActiveOperation="@hasActiveOperation">
+                    @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
+                    {
+                        foreach (var (operationType, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+                        {
+                            <div class="nav-dropdown-item">
+                                <NavLink href="@(operation.OperationId)" class="nav-link">
+                                    <span class="nav-dropdown-icon nav-dropdown-spacer"></span>
+                                    <span class="nav-link-text">
+                                        @(operation.Summary ?? path)
+                                    </span>
+                                    <span class="nav-link-method">
+                                        <OperationTypeTag OperationType="operationType"/>
+                                    </span>
+                                </NavLink>
+                            </div>
+                        }
+                    }
+                </NavDropdown>
+            </div>
+        }
+    }
+</nav>
+
+@code {
+    [CascadingParameter]
+    public OpenApiDocument? OpenApiDocument { get; set; }
+
+    private bool HasActiveOperationInTag(string tag)
+    {
+        foreach (var (_, pathItem) in OpenApiDocument?.Paths ?? [])
+        {
+            foreach (var (_, operation) in pathItem.Operations.Where(o => o.Value.Tags.Any(t => t.Name == tag)))
+            {
+                if (IsActiveOperation(operation.OperationId))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private bool IsActiveOperation(string operationId)
+    {
+        var currentUri = Navigation.Uri;
+        var segments = currentUri.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        return segments.Length > 0 && segments[^1] == operationId;
+    }
+}

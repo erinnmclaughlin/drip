@@ -39,12 +39,12 @@
     align-items: center;
 }
 
-.upload-link {
+::deep .upload-link {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: var(--accent-info);
+    background-color: var(--accent-info);
     color: white;
     border-radius: 8px;
     text-decoration: none;
@@ -53,7 +53,7 @@
     transition: background-color 0.2s ease;
 }
 
-.upload-link:hover {
+::deep .upload-link:hover {
     background: var(--accent-get);
     color: white;
     text-decoration: none;
@@ -110,64 +110,10 @@
     width: var(--sidebar-width);
     background: var(--sidebar-background);
     border-right: var(--sidebar-border-right);
-    padding: var(--sidebar-padding);
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     transition: width 0.25s var(--transition-normal), min-width 0.25s var(--transition-normal), max-width 0.25s var(--transition-normal), background 0.2s;
-}
-
-.sidebar-nav {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    min-height: 0;
-    transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
-}
-
-.nav-item {
-    margin-bottom: var(--spacing-sm);
-    transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
-}
-
-::deep .nav-link {
-    display: flex;
-    align-items: center;
-    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-sm);
-    border-radius: var(--radius-sm);
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: var(--font-size-sm);
-    border-left: 3px solid transparent;
-    transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
-}
-
-::deep .nav-link:hover {
-    background: var(--background-hover);
-    color: var(--text-primary);
-}
-
-::deep .nav-link.active {
-    background: var(--background-hover);
-    color: var(--text-primary);
-    font-weight: var(--font-weight-medium);
-    border-left: 3px solid var(--accent-info);
-    text-decoration: none;
-}
-
-::deep .nav-link.active:hover {
-    color: var(--text-primary);
-    text-decoration: none;
-}
-
-::deep .nav-link-method {
-    flex-shrink: 0;
-    margin-left: var(--spacing-sm);
-}
-
-::deep .nav-link-text {
-    flex: 1;
-    line-height: var(--line-height-tight);
-    transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
 }
 
 .content {
@@ -220,53 +166,4 @@
 ::deep .logo-raindrop {
     vertical-align: middle;
     margin-right: 8px;
-}
-
-.topbar-sidebar-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    margin-right: var(--spacing-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-primary);
-    height: 40px;
-    width: 40px;
-}
-
-.topbar-sidebar-toggle svg {
-    display: block;
-    width: 24px;
-    height: 24px;
-}
-
-.sidebar-toggle {
-    display: none;
-}
-
-.sidebar.collapsed {
-    width: 48px;
-    min-width: 48px;
-    max-width: 48px;
-    transition: width 0.25s var(--transition-normal), min-width 0.25s var(--transition-normal), max-width 0.25s var(--transition-normal), background 0.2s;
-}
-
-.sidebar.collapsed .sidebar-nav,
-.sidebar.collapsed .logo,
-.sidebar.collapsed .nav-item,
-.sidebar.collapsed .nav-dropdown,
-.sidebar.collapsed .nav-link,
-.sidebar.collapsed .nav-link-text,
-.sidebar.collapsed .nav-dropdown-text,
-.sidebar.collapsed .nav-badge,
-.sidebar.collapsed .nav-dropdown-content {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0s;
-}
-
-.sidebar.collapsed .sidebar-toggle {
-    margin-bottom: 0;
 }
