@@ -1,11 +1,8 @@
 ﻿@inherits LayoutComponentBase
 @using Drip.Components.TopBar
-@using Drip.Services
-@inject HttpClient HttpClient
 @inject ThemeService ThemeService
 @inject OpenApiService OpenApiService
 @inject OpenApiStateService StateService
-@inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 @implements IDisposable
 
@@ -96,7 +93,7 @@
         // Load default document if no documents are available
         if (!StateService.AllDocuments.Any())
         {
-            var document = await OpenApiService.LoadDefaultDocumentAsync(HttpClient);
+            var document = await OpenApiService.LoadDefaultDocumentAsync();
             if (document != null)
             {
                 StateService.SetDocument(document, "default");

@@ -4,13 +4,15 @@ using Microsoft.OpenApi.Models;
 
 namespace Drip.Services;
 
-public class OpenApiService
+public class OpenApiService(HttpClient httpClient)
 {
-    public async Task<(OpenApiDocument? Document, OpenApiDiagnostic? Diagnostic, string? Error)> ParseOpenApiDocumentAsync(IBrowserFile file)
+    private readonly HttpClient _httpClient = httpClient;
+    
+    public static async Task<(OpenApiDocument? Document, OpenApiDiagnostic? Diagnostic, string? Error)> ParseOpenApiDocumentAsync(IBrowserFile file)
     {
         try
         {
-            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // 10MB max
+            await using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // 10MB max
             using var reader = new StreamReader(stream);
             var content = await reader.ReadToEndAsync();
             
@@ -56,11 +58,11 @@ public class OpenApiService
         }
     }
     
-    public async Task<OpenApiDocument?> LoadDefaultDocumentAsync(HttpClient httpClient, string fileName = "petstore.json")
+    public async Task<OpenApiDocument?> LoadDefaultDocumentAsync(string fileName = "petstore.json")
     {
         try
         {
-            var stream = await httpClient.GetStreamAsync(fileName);
+            var stream = await _httpClient.GetStreamAsync(fileName);
             var openApiReader = new OpenApiStreamReader();
             var document = openApiReader.Read(stream, out var diagnostic);
             

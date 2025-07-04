@@ -1,7 +1,3 @@
-@using Microsoft.AspNetCore.Components.Forms
-@using System.Linq
-@using System.IO
-
 <div class="file-upload-container">
     <div class="file-upload-area @(_isDragOver ? "drag-over" : "")" 
          @ondragenter="OnDragEnter" 
@@ -67,11 +63,11 @@
     private bool _isDragOver;
     private string _errorMessage = string.Empty;
 
-    private string FormatFileSizeDisplay(long bytes)
+    private static string FormatFileSizeDisplay(long bytes)
     {
-        string[] sizes = { "B", "KB", "MB", "GB" };
+        string[] sizes = ["B", "KB", "MB", "GB"];
         double len = bytes;
-        int order = 0;
+        var order = 0;
         while (len >= 1024 && order < sizes.Length - 1)
         {
             order++;
@@ -96,16 +92,18 @@
         _isDragOver = false;
     }
     
-    private async Task OnDrop(DragEventArgs e)
+    private Task OnDrop(DragEventArgs e)
     {
         _isDragOver = false;
-        
+
         // if (e.DataTransfer.Files.Count > 0)
         // {
         //     // Note: In Blazor WebAssembly, we can't directly access dropped files
         //     // This is a limitation of the platform. Users will need to use the file input.
         //     _errorMessage = "Please use the file input to select your OpenAPI document.";
         // }
+        
+        return Task.CompletedTask;
     }
     
     private async Task ProcessFile(IBrowserFile file)
