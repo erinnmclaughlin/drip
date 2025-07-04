@@ -161,7 +161,9 @@
     {
         if (_uploadedDocument != null)
         {
-            StateService.SetDocument(_uploadedDocument, "uploaded");
+            var documentName = _uploadedDocument.Info?.Title ?? "Untitled Document";
+            StateService.AddDocument(_uploadedDocument, documentName, "uploaded");
+            StateService.SwitchToDocument(StateService.AllDocuments.Last().Id);
             // Add a small delay to ensure the state is properly set
             await Task.Delay(100);
             Navigation.NavigateTo("/");

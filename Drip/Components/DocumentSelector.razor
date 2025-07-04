@@ -1,0 +1,144 @@
+@using Drip.Services
+@inject OpenApiStateService StateService
+@inject IJSRuntime JSRuntime
+
+<div class="document-selector @(IsExpanded ? "expanded" : "")" @ref="dropdownRef">
+    <button type="button" class="document-selector-toggle" @onclick="ToggleDropdown" title="Switch between documents">
+        <span class="document-selector-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14,2 14,8 20,8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10,9 9,9 8,9"/>
+            </svg>
+        </span>
+        <span class="document-selector-text">
+            @if (CurrentDocument != null)
+            {
+                @CurrentDocument.Name
+            }
+            else
+            {
+                <span>No Document</span>
+            }
+        </span>
+        <span class="document-selector-arrow">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6,9 12,15 18,9"></polyline>
+            </svg>
+        </span>
+    </button>
+    
+    @if (IsExpanded)
+    {
+        <div class="document-selector-content">
+            <div class="document-selector-header">
+                <span class="document-selector-title">Documents</span>
+                <span class="document-count">@StateService.AllDocuments.Count()</span>
+            </div>
+            
+            <div class="document-list">
+                @foreach (var document in StateService.AllDocuments)
+                {
+                    <button type="button" 
+                            class="document-item @(document.Id == StateService.CurrentDocumentId ? "active" : "")" 
+                            @onclick="() => SelectDocument(document.Id)">
+                        <span class="item-dot@(document.Id == StateService.CurrentDocumentId ? " active" : "")"></span>
+                        <div class="document-item-info">
+                            <span class="document-name">@document.Name</span>
+                            <span class="document-source">@GetSourceLabel(document.Source)</span>
+                        </div>
+                        <div class="document-item-icons">
+                            @if (document.Source != "default")
+                            {
+                                <button type="button" 
+                                        class="document-remove-btn" 
+                                        @onclick:stopPropagation="true"
+                                        @onclick="() => RemoveDocument(document.Id)"
+                                        title="Remove document">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            }
+                        </div>
+                    </button>
+                }
+            </div>
+            
+            @if (!StateService.AllDocuments.Any())
+            {
+                <div class="document-empty">
+                    <span>No documents available</span>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool IsExpanded { get; set; }
+    private DocumentInfo? CurrentDocument => StateService.GetCurrentDocumentInfo();
+    private ElementReference dropdownRef;
+    
+    protected override void OnInitialized()
+    {
+        StateService.OnDocumentsListChanged += HandleDocumentsChanged;
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("addDocumentSelectorClickOutsideHandler", dropdownRef, DotNetObjectReference.Create(this));
+        }
+    }
+    
+    public void Dispose()
+    {
+        StateService.OnDocumentsListChanged -= HandleDocumentsChanged;
+    }
+    
+    [JSInvokable]
+    public void OnClickOutside()
+    {
+        if (IsExpanded)
+        {
+            IsExpanded = false;
+            StateHasChanged();
+        }
+    }
+    
+    private void ToggleDropdown()
+    {
+        IsExpanded = !IsExpanded;
+    }
+    
+    private void SelectDocument(string documentId)
+    {
+        StateService.SwitchToDocument(documentId);
+        IsExpanded = false;
+    }
+    
+    private void RemoveDocument(string documentId)
+    {
+        StateService.RemoveDocument(documentId);
+    }
+    
+    private void HandleDocumentsChanged()
+    {
+        StateHasChanged();
+    }
+    
+    private string GetSourceLabel(string source)
+    {
+        return source switch
+        {
+            "default" => "Default",
+            "uploaded" => "Uploaded",
+            _ => source
+        };
+    }
+} 

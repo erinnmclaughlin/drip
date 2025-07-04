@@ -21,15 +21,9 @@
                 </NavLink>
             </div>
             <div class="top-bar-actions">
-                @if (StateService.IsUploadedDocument)
+                @if (StateService.HasDocument)
                 {
-                    <button type="button" class="default-doc-button" @onclick="LoadDefaultDocument" title="Load Default Document">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 3v18h18"/>
-                            <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
-                        </svg>
-                        <span>Default</span>
-                    </button>
+                    <DocumentSelector />
                 }
                 <NavLink href="upload" class="upload-link" title="Upload OpenAPI Document">
                     Upload a Document
@@ -94,8 +88,8 @@
         // Subscribe to document changes
         StateService.OnDocumentChanged += HandleDocumentChanged;
         
-        // Load default document if no document is set
-        if (!StateService.HasDocument)
+        // Load default document if no documents are available
+        if (!StateService.AllDocuments.Any())
         {
             var document = await OpenApiService.LoadDefaultDocumentAsync(HttpClient);
             if (document != null)
@@ -124,16 +118,6 @@
         await JsRuntime.InvokeVoidAsync("toggleTheme");
         _currentTheme = await JsRuntime.InvokeAsync<string>("getCurrentTheme");
         StateHasChanged();
-    }
-
-    private async Task LoadDefaultDocument()
-    {
-        var document = await OpenApiService.LoadDefaultDocumentAsync(HttpClient);
-        if (document != null)
-        {
-            StateService.SetDocument(document, "default");
-            NavigationManager.NavigateTo("");
-        }
     }
 
     private void HandleDocumentChanged()
