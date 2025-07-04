@@ -1,0 +1,59 @@
+@using Microsoft.OpenApi.Models
+
+<div class="schema-display">
+    @if (Schema == null)
+    {
+        <div class="schema-error">
+            <span>No schema provided</span>
+        </div>
+    }
+    else if (Schema.Type == "object" || Schema.Properties?.Any() == true)
+    {
+        <div class="schema-container">
+            @if (!string.IsNullOrEmpty(Schema.Title))
+            {
+                <h3 class="schema-title">@Schema.Title</h3>
+            }
+            @if (!string.IsNullOrEmpty(Schema.Description))
+            {
+                <p class="schema-description">@Schema.Description</p>
+            }
+            <SchemaTree Schema="Schema" />
+        </div>
+    }
+    else if (Schema.Type == "array")
+    {
+        <div class="schema-container">
+            @if (!string.IsNullOrEmpty(Schema.Title))
+            {
+                <h3 class="schema-title">@Schema.Title</h3>
+            }
+            @if (!string.IsNullOrEmpty(Schema.Description))
+            {
+                <p class="schema-description">@Schema.Description</p>
+            }
+            <SchemaTree Schema="Schema" />
+        </div>
+    }
+    else if (Schema.Reference != null)
+    {
+        <div class="schema-container">
+            <h3 class="schema-title">Reference: @Schema.Reference.Id</h3>
+            <SchemaTree Schema="Schema" />
+        </div>
+    }
+    else
+    {
+        <div class="schema-container">
+            <SchemaTree Schema="Schema" />
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public OpenApiSchema? Schema { get; set; }
+
+    [CascadingParameter]
+    public OpenApiDocument? Document { get; set; }
+} 

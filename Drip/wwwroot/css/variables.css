@@ -20,6 +20,8 @@
     --accent-error: #f93e3e;
     --accent-warning: #fca130;
     --accent-info: #61affe;
+    --accent-primary: #61affe;
+    --accent-secondary: #fca130;
     
     /* Tag Colors */
     --tag-beta: #ff6b6b;
@@ -157,6 +159,8 @@
     --accent-error: #b71c1c;
     --accent-warning: #b26a00;
     --accent-info: #1565c0;
+    --accent-primary: #1565c0;
+    --accent-secondary: #b26a00;
     --accent-get: #1565c0;
     --accent-post: #2e7d32;
     --accent-put: #b26a00;
