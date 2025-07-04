@@ -85,24 +85,8 @@ pre code {
     font-size: inherit;
 }
 
-.icon {
-    margin-right: 8px;
-}
-
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid var(--accent-success);
-    box-shadow: var(--glow-success);
-}
-
-.invalid {
-    outline: 1px solid var(--accent-error);
-    box-shadow: var(--glow-error);
-}
-
-.validation-message {
-    color: var(--accent-error);
-    font-size: var(--font-size-sm);
-    font-family: var(--font-monospace);
+.icon svg {
+    width: 100%;
 }
 
 #blazor-error-ui {
