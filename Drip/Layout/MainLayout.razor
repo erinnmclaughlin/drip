@@ -124,6 +124,23 @@
         currentTheme = await JS.InvokeAsync<string>("getCurrentTheme");
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        manuallyCollapsedDropdowns.Clear();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
     private async Task ToggleTheme()
     {
         await JS.InvokeVoidAsync("toggleTheme");
@@ -165,14 +182,13 @@
             var tag = OpenApiDocument.Tags.ElementAt(i);
             if (HasActiveOperationInTag(tag))
             {
-                // If this dropdown contains an active operation, expand it
-                if (!expandedDropdowns.Contains(i))
+                // Only auto-expand if not manually collapsed
+                if (!expandedDropdowns.Contains(i) && !manuallyCollapsedDropdowns.Contains(i))
                 {
                     expandedDropdowns.Add(i);
                     StateHasChanged();
                 }
-                // Remove from manually collapsed list since we're auto-expanding it
-                manuallyCollapsedDropdowns.Remove(i);
+                // Do not remove from manuallyCollapsedDropdowns here
             }
         }
     }
