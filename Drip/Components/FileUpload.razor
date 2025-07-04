@@ -1,0 +1,146 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Linq
+@using System.IO
+
+<div class="file-upload-container">
+    <div class="file-upload-area @(_isDragOver ? "drag-over" : "")" 
+         @ondragenter="OnDragEnter" 
+         @ondragleave="OnDragLeave" 
+         @ondragover:preventDefault 
+         @ondrop="OnDrop">
+        
+        <div class="upload-content">
+            <div class="upload-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7,10 12,15 17,10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+            </div>
+            
+            <h3 class="upload-title">Upload OpenAPI Document</h3>
+            <p class="upload-description">
+                Drag and drop your OpenAPI specification file here, or click to browse
+            </p>
+            <p class="upload-formats">Supports JSON and YAML formats</p>
+            
+            <label style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <InputFile OnChange="OnFileSelected" accept=".json,.yaml,.yml" class="file-input" style="display:none;" />
+                <span class="upload-button">Choose File</span>
+            </label>
+        </div>
+    </div>
+    
+    @if (_selectedFile != null)
+    {
+        <div class="file-info">
+            <div class="file-details">
+                <span class="file-name">@_selectedFile.Name</span>
+                <span class="file-size">@FormatFileSizeDisplay(_selectedFile.Size)</span>
+            </div>
+            <button type="button" class="remove-button" @onclick="RemoveFile" title="Remove file">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    }
+    
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="error-message">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            @_errorMessage
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<IBrowserFile> OnFileUpload { get; set; }
+    
+    [Parameter]
+    public EventCallback OnFileRemoved { get; set; }
+    
+    private IBrowserFile? _selectedFile;
+    private bool _isDragOver;
+    private string _errorMessage = string.Empty;
+
+    private string FormatFileSizeDisplay(long bytes)
+    {
+        string[] sizes = { "B", "KB", "MB", "GB" };
+        double len = bytes;
+        int order = 0;
+        while (len >= 1024 && order < sizes.Length - 1)
+        {
+            order++;
+            len /= 1024;
+        }
+        return $"{len:0.##} {sizes[order]}";
+    }
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        await ProcessFile(file);
+    }
+    
+    private void OnDragEnter()
+    {
+        _isDragOver = true;
+    }
+    
+    private void OnDragLeave()
+    {
+        _isDragOver = false;
+    }
+    
+    private async Task OnDrop(DragEventArgs e)
+    {
+        _isDragOver = false;
+        
+        // if (e.DataTransfer.Files.Count > 0)
+        // {
+        //     // Note: In Blazor WebAssembly, we can't directly access dropped files
+        //     // This is a limitation of the platform. Users will need to use the file input.
+        //     _errorMessage = "Please use the file input to select your OpenAPI document.";
+        // }
+    }
+    
+    private async Task ProcessFile(IBrowserFile file)
+    {
+        _errorMessage = string.Empty;
+        
+        // Validate file type
+        var allowedExtensions = new[] { ".json", ".yaml", ".yml" };
+        var fileExtension = Path.GetExtension(file.Name).ToLowerInvariant();
+        
+        if (!allowedExtensions.Contains(fileExtension))
+        {
+            _errorMessage = "Please select a valid OpenAPI document (JSON or YAML file).";
+            return;
+        }
+        
+        // Validate file size (max 10MB)
+        // if (file.Size > 10 * 1024 * 1024L)
+        // {
+        //     _errorMessage = "File size must be less than 10MB.";
+        //     return;
+        // }
+        
+        _selectedFile = file;
+        await OnFileUpload.InvokeAsync(file);
+    }
+    
+    private async Task RemoveFile()
+    {
+        _selectedFile = null;
+        _errorMessage = string.Empty;
+        await OnFileRemoved.InvokeAsync();
+    }
+} 

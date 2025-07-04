@@ -1,0 +1,176 @@
+@page "/upload"
+@using Drip.Services
+@inject NavigationManager Navigation
+@inject OpenApiService OpenApiService
+@inject OpenApiStateService StateService
+
+<PageTitle>Upload OpenAPI Document | drip</PageTitle>
+
+<div class="upload-page">
+    <div class="upload-header">
+        <h1 class="page-title">Upload OpenAPI Document</h1>
+        <p class="page-description">
+            Upload your own OpenAPI specification to explore and test your API endpoints.
+        </p>
+    </div>
+    
+    <div class="upload-content">
+        <FileUpload OnFileUpload="HandleFileUpload" OnFileRemoved="HandleFileRemoved" />
+        
+        @if (_isLoading)
+        {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Processing OpenAPI document...</p>
+            </div>
+        }
+        
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <div class="error-container">
+                <div class="error-card">
+                    <h3 class="error-title">Upload Failed</h3>
+                    <p class="error-message">@_errorMessage</p>
+                    <button type="button" class="retry-button" @onclick="ClearError">
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        }
+        
+        @if (_uploadedDocument != null)
+        {
+            <div class="success-container">
+                <div class="success-card">
+                    <div class="success-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22,4 12,14.01 9,11.01"/>
+                        </svg>
+                        <h3 class="success-title">Document Uploaded Successfully!</h3>
+                    </div>
+                    
+                    <div class="document-info">
+                        <div class="info-item">
+                            <span class="info-label">Title:</span>
+                            <span class="info-value">@(_uploadedDocument.Info?.Title ?? "Untitled")</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Version:</span>
+                            <span class="info-value">@(_uploadedDocument.Info?.Version ?? "Unknown")</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Endpoints:</span>
+                            <span class="info-value">@(_uploadedDocument.Paths?.Count ?? 0)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="primary-button" @onclick="UseUploadedDocument">
+                            Use This Document
+                        </button>
+                        <button type="button" class="secondary-button" @onclick="UploadAnother">
+                            Upload Another
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div class="upload-footer">
+        <div class="footer-content">
+            <h4 class="footer-title">Supported Formats</h4>
+            <div class="format-list">
+                <div class="format-item">
+                    <span class="format-icon">📄</span>
+                    <span class="format-name">JSON</span>
+                    <span class="format-ext">.json</span>
+                </div>
+                <div class="format-item">
+                    <span class="format-icon">📋</span>
+                    <span class="format-name">YAML</span>
+                    <span class="format-ext">.yaml, .yml</span>
+                </div>
+            </div>
+            
+            <div class="footer-tips">
+                <h5 class="tips-title">Tips for best results:</h5>
+                <ul class="tips-list">
+                    <li>Ensure your OpenAPI document is valid (version 3.0+ recommended)</li>
+                    <li>Include operation IDs for better navigation</li>
+                    <li>Add descriptions to improve documentation</li>
+                    <li>Keep file size under 10MB</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool _isLoading = false;
+    private string _errorMessage = string.Empty;
+    private OpenApiDocument? _uploadedDocument;
+    
+    private async Task HandleFileUpload(IBrowserFile file)
+    {
+        _isLoading = true;
+        _errorMessage = string.Empty;
+        _uploadedDocument = null;
+        
+        try
+        {
+            var (document, diagnostic, error) = await OpenApiService.ParseOpenApiDocumentAsync(file);
+            
+            if (error != null)
+            {
+                _errorMessage = error;
+                return;
+            }
+            
+            if (document == null)
+            {
+                _errorMessage = "Failed to parse OpenAPI document. Please check the file format.";
+                return;
+            }
+            
+            _uploadedDocument = document;
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"An unexpected error occurred: {ex.Message}";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+    
+    private void HandleFileRemoved()
+    {
+        _uploadedDocument = null;
+        _errorMessage = string.Empty;
+    }
+    
+    private void ClearError()
+    {
+        _errorMessage = string.Empty;
+    }
+    
+    private async Task UseUploadedDocument()
+    {
+        if (_uploadedDocument != null)
+        {
+            StateService.SetDocument(_uploadedDocument, "uploaded");
+            // Add a small delay to ensure the state is properly set
+            await Task.Delay(100);
+            Navigation.NavigateTo("/");
+        }
+    }
+    
+    private void UploadAnother()
+    {
+        _uploadedDocument = null;
+        _errorMessage = string.Empty;
+    }
+} 

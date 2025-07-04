@@ -20,7 +20,7 @@ else
                 <span class="operation-method">
                     <OperationTypeTag OperationType="OperationMethod"/>
                 </span>
-                <h1 class="operation-title">@OpenApiOperation.Summary</h1>
+                <h1 class="operation-title">@(OpenApiOperation.Summary ?? OperationPath)</h1>
             </div>
             <div class="operation-path">
                 <code>@OperationPath</code>
