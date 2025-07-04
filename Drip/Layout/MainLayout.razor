@@ -45,7 +45,7 @@
                     var index = i;
                     var tag = OpenApiDocument.Tags.ElementAt(i);
                     var hasActiveOperation = HasActiveOperationInTag(tag);
-                    var isDropdownExpanded = hasActiveOperation || IsDropdownExpanded(index);
+                    var isDropdownExpanded = IsDropdownExpanded(index);
                     
                     <div class="nav-item">
                         <div class="nav-dropdown @(isDropdownExpanded ? "expanded" : "")" id="nav-dropdown-@index">
@@ -114,6 +114,7 @@
     private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
     private string currentTheme = "dark";
     private HashSet<int> expandedDropdowns = new();
+    private HashSet<int> manuallyCollapsedDropdowns = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -136,12 +137,45 @@
         if (expandedDropdowns.Contains(index))
         {
             expandedDropdowns.Remove(index);
+            manuallyCollapsedDropdowns.Add(index);
         }
         else
         {
             expandedDropdowns.Add(index);
+            manuallyCollapsedDropdowns.Remove(index);
         }
         StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            // Auto-expand dropdowns that contain active operations
+            AutoExpandActiveDropdowns();
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    private void AutoExpandActiveDropdowns()
+    {
+        if (OpenApiDocument?.Tags == null) return;
+        
+        for (int i = 0; i < OpenApiDocument.Tags.Count; i++)
+        {
+            var tag = OpenApiDocument.Tags.ElementAt(i);
+            if (HasActiveOperationInTag(tag))
+            {
+                // If this dropdown contains an active operation, expand it
+                if (!expandedDropdowns.Contains(i))
+                {
+                    expandedDropdowns.Add(i);
+                    StateHasChanged();
+                }
+                // Remove from manually collapsed list since we're auto-expanding it
+                manuallyCollapsedDropdowns.Remove(i);
+            }
+        }
     }
 
     private bool IsDropdownExpanded(int index)
