@@ -1,5 +1,3 @@
-@using Microsoft.OpenApi.Models
-
 <div class="nav-item">
     <div class="nav-dropdown @(IsExpanded ? "expanded" : "")">
         <button type="button" class="nav-dropdown-toggle @(HasActiveOperation ? "active" : "")" @onclick="ToggleDropdown">
@@ -30,9 +28,8 @@
             IsExpanded = true;
     }
 
-    private Task ToggleDropdown()
+    private void ToggleDropdown()
     {
         IsExpanded = !IsExpanded;
-        return Task.CompletedTask;
     }
-} 
+}

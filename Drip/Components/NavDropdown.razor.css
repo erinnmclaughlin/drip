@@ -1,4 +1,3 @@
-
 .nav-item {
     margin-bottom: var(--spacing-sm);
     transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
@@ -16,10 +15,11 @@
     border: none;
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
-    transition: background-color var(--transition-normal);
     text-align: left;
     position: relative;
-    transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
+    transition: opacity 0.2s var(--transition-normal),
+                color 0.2s var(--transition-normal), 
+                background-color var(--transition-normal);
 }
 
 .nav-dropdown-toggle:hover {
@@ -74,7 +74,6 @@
     color: var(--text-secondary);
     text-decoration: none;
     font-size: var(--font-size-sm);
-    transition: all var(--transition-normal);
     border-left: 3px solid transparent;
     transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
 }
@@ -86,15 +85,15 @@
 
 ::deep .nav-link.active {
     background: var(--background-hover);
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
     font-weight: var(--font-weight-medium);
     border-left: 3px solid var(--accent-info);
-    text-decoration: none !important;
+    text-decoration: none;
 }
 
 ::deep .nav-link.active:hover {
-    color: var(--text-primary) !important;
-    text-decoration: none !important;
+    color: var(--text-primary);
+    text-decoration: none;
 }
 
 ::deep .nav-link-method {

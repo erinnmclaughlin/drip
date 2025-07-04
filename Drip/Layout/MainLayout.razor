@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject HttpClient HttpClient
-@inject IJSRuntime JS
+@inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
 
 <div class="app-container">
@@ -52,16 +52,14 @@
                         <span class="nav-link-text">Home</span>
                     </NavLink>
                 </div>
-                @for (var i = 0; i < OpenApiDocument?.Tags.Count; i++)
+                @foreach (var tag in OpenApiDocument?.Tags ?? [])
                 {
-                    var index = i;
-                    var tag = OpenApiDocument.Tags.ElementAt(i);
                     var hasActiveOperation = HasActiveOperationInTag(tag);
                     
                     <NavDropdown ButtonText="@tag.Name" HasActiveOperation="@hasActiveOperation">
                         @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
                         {
-                            foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Any(t => t.Name == tag.Name)))
+                            foreach (var (operationType, operation) in pathItem.Operations.Where(o => o.Value.Tags.Any(t => t.Name == tag.Name)))
                             {
                                 <div class="nav-dropdown-item">
                                     <NavLink href="@operation.OperationId" class="nav-link">
@@ -70,7 +68,7 @@
                                             @(operation.Summary ?? path)
                                         </span>
                                         <span class="nav-link-method">
-                                            <OperationTypeTag OperationType="method"/>
+                                            <OperationTypeTag OperationType="operationType"/>
                                         </span>
                                     </NavLink>
                                 </div>
@@ -104,8 +102,6 @@
     
     private OpenApiDocument? OpenApiDocument { get; set; }
     private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
-    private HashSet<int> expandedDropdowns = new();
-    private HashSet<int> manuallyCollapsedDropdowns = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -119,83 +115,16 @@
     {
         if (firstRender)
         {
-            _currentTheme = await JS.InvokeAsync<string>("getCurrentTheme");
+            _currentTheme = await JsRuntime.InvokeAsync<string>("getCurrentTheme");
             StateHasChanged();
         }
     }
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        Navigation.LocationChanged += OnLocationChanged;
-    }
-
-    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
-    {
-        manuallyCollapsedDropdowns.Clear();
-        StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        Navigation.LocationChanged -= OnLocationChanged;
-    }
-
     private async Task ToggleTheme()
     {
-        await JS.InvokeVoidAsync("toggleTheme");
-        _currentTheme = await JS.InvokeAsync<string>("getCurrentTheme");
+        await JsRuntime.InvokeVoidAsync("toggleTheme");
+        _currentTheme = await JsRuntime.InvokeAsync<string>("getCurrentTheme");
         StateHasChanged();
-    }
-
-    private async Task ToggleDropdown(int index)
-    {
-        if (expandedDropdowns.Contains(index))
-        {
-            expandedDropdowns.Remove(index);
-            manuallyCollapsedDropdowns.Add(index);
-        }
-        else
-        {
-            expandedDropdowns.Add(index);
-            manuallyCollapsedDropdowns.Remove(index);
-        }
-        await InvokeAsync(StateHasChanged);
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            // Auto-expand dropdowns that contain active operations
-            AutoExpandActiveDropdowns();
-        }
-        base.OnAfterRender(firstRender);
-    }
-
-    private void AutoExpandActiveDropdowns()
-    {
-        if (OpenApiDocument?.Tags == null) return;
-        
-        for (int i = 0; i < OpenApiDocument.Tags.Count; i++)
-        {
-            var tag = OpenApiDocument.Tags.ElementAt(i);
-            if (HasActiveOperationInTag(tag))
-            {
-                // Only auto-expand if not manually collapsed
-                if (!expandedDropdowns.Contains(i) && !manuallyCollapsedDropdowns.Contains(i))
-                {
-                    expandedDropdowns.Add(i);
-                    StateHasChanged();
-                }
-                // Do not remove from manuallyCollapsedDropdowns here
-            }
-        }
-    }
-
-    private bool IsDropdownExpanded(int index)
-    {
-        return expandedDropdowns.Contains(index);
     }
 
     private bool IsActiveOperation(string operationId)
@@ -209,9 +138,9 @@
     {
         if (OpenApiDocument?.Paths == null) return false;
         
-        foreach (var (path, pathItem) in OpenApiDocument.Paths)
+        foreach (var (_, pathItem) in OpenApiDocument.Paths)
         {
-            foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+            foreach (var (_, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
             {
                 if (IsActiveOperation(operation.OperationId))
                 {
@@ -220,15 +149,5 @@
             }
         }
         return false;
-    }
-
-    private bool IsHomePage()
-    {
-        var currentUri = Navigation.Uri;
-        var uri = new Uri(currentUri);
-        var path = uri.AbsolutePath;
-        
-        // Check if we're at the root path or if the path is just "/"
-        return path == "/" || path == "" || path.Length == 0;
     }
 }
