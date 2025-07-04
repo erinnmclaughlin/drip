@@ -1,7 +1,5 @@
 .page-container {
-    padding-top: 32px;
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
+   padding: var(--spacing-2xl);
 }
 
 .operation-not-found {
@@ -56,6 +54,10 @@
     text-decoration: none;
     background: var(--background-tertiary);
     border-color: var(--border-focus);
+}
+
+.tag-name {
+    margin: 0 0 var(--spacing-lg);
 }
 
 .operation-detail {
@@ -287,8 +289,7 @@
 /* Responsive design */
 @media (max-width: 1024px) {
     .page-container {
-        padding-left: var(--spacing-sm);
-        padding-right: var(--spacing-sm);
+        padding: var(--spacing-lg);
     }
     
     .operation-header,
@@ -304,9 +305,7 @@
 
 @media (max-width: 768px) {
     .page-container {
-        padding-top: var(--spacing-lg);
-        padding-left: var(--spacing-sm);
-        padding-right: var(--spacing-sm);
+        padding: var(--spacing-md);
     }
     
     .operation-header,
@@ -365,12 +364,6 @@
 }
 
 @media (max-width: 480px) {
-    .page-container {
-        padding-top: var(--spacing-md);
-        padding-left: var(--spacing-xs);
-        padding-right: var(--spacing-xs);
-    }
-    
     .operation-header,
     .operation-section {
         padding: var(--spacing-md);

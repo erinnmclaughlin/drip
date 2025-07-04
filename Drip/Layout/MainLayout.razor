@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @using Drip.Components.TopBar
+@inject NavigationManager NavigationManager
 @inject ThemeService ThemeService
 @inject OpenApiService OpenApiService
 @inject OpenApiStateService StateService
@@ -85,6 +86,7 @@
         // Subscribe to document changes
         StateService.OnDocumentChanged += HandleDocumentChanged;
         ThemeService.OnThemeChanged += HandleThemeChanged;
+        NavigationManager.LocationChanged += HandleLocationChanged;
         
         // Load default document if no documents are available
         if (!StateService.AllDocuments.Any())
@@ -110,6 +112,7 @@
     {
         StateService.OnDocumentChanged -= HandleDocumentChanged;
         ThemeService.OnThemeChanged -= HandleThemeChanged;
+        NavigationManager.LocationChanged -= HandleLocationChanged;
     }
 
     private void CloseSidebar()
@@ -127,6 +130,12 @@
     private void HandleDocumentChanged()
     {
         OpenApiDocument = StateService.CurrentDocument;
+        StateHasChanged();
+    }
+    
+    private void HandleLocationChanged(object? o, LocationChangedEventArgs? e)
+    {
+        IsSidebarOpen = false;
         StateHasChanged();
     }
 }
