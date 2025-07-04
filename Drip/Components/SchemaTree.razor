@@ -1,64 +1,47 @@
 @using Microsoft.OpenApi.Models
 
 <div class="schema-tree">
-    @if (Schema?.Type == "object")
+    @if (Schema?.Type == "object" && Schema.Properties?.Any() == true)
     {
-        <div class="schema-object">
-            <div class="schema-header" @onclick="ToggleExpanded">
-                <span class="schema-type">object</span>
-                @if (!string.IsNullOrEmpty(Schema.Title))
-                {
-                    <span class="schema-title">@Schema.Title</span>
-                }
-                <span class="schema-toggle">@(IsExpanded ? "▼" : "▶")</span>
-            </div>
-            
-            @if (IsExpanded)
-            {
-                <div class="schema-content">
-                    @if (!string.IsNullOrEmpty(Schema.Description))
+        @foreach (var (propertyName, propertySchema) in Schema.Properties)
+        {
+            var isRequired = Schema.Required?.Contains(propertyName) == true;
+            <div class="schema-property @(isRequired ? "required" : "")">
+                <div class="property-header">
+                    <span class="property-name">@propertyName</span>
+                    @if (isRequired)
                     {
-                        <div class="schema-description">@Schema.Description</div>
+                        <span class="required-badge">required</span>
                     }
-                    
-                    @if (Schema.Properties?.Any() == true)
-                    {
-                        <div class="schema-properties">
-                            @foreach (var (propertyName, propertySchema) in Schema.Properties)
-                            {
-                                var isRequired = Schema.Required?.Contains(propertyName) == true;
-                                <div class="schema-property @(isRequired ? "required" : "")">
-                                    <div class="property-header">
-                                        <span class="property-name">@propertyName</span>
-                                        @if (isRequired)
-                                        {
-                                            <span class="required-badge">required</span>
-                                        }
-                                        <span class="property-type">@GetTypeDisplay(propertySchema)</span>
-                                    </div>
-                                    
-                                    @if (!string.IsNullOrEmpty(propertySchema.Description))
-                                    {
-                                        <div class="property-description">@propertySchema.Description</div>
-                                    }
-                                    
-                                    @if (propertySchema.Type == "object" || propertySchema.Type == "array" || propertySchema.Properties?.Any() == true)
-                                    {
-                                        <div class="property-nested">
-                                            <SchemaTree Schema="propertySchema" />
-                                        </div>
-                                    }
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="schema-empty">No properties defined</div>
-                    }
+                    <span class="property-type">@GetTypeDisplay(propertySchema)</span>
                 </div>
-            }
-        </div>
+                @if (!string.IsNullOrEmpty(propertySchema.Description))
+                {
+                    <div class="property-description">@propertySchema.Description</div>
+                }
+                @if (propertySchema.Type == "object" && propertySchema.Properties?.Any() == true)
+                {
+                    <div class="property-nested schema-nested">
+                        <SchemaTree Schema="propertySchema" Document="Document" NestingLevel="NestingLevel + 1" />
+                    </div>
+                }
+                else if (propertySchema.Type == "array")
+                {
+                    <div class="property-nested schema-nested">
+                        <div class="array-items-label">Items:</div>
+                        <div class="array-items-content">
+                            <SchemaTree Schema="propertySchema.Items" Document="Document" NestingLevel="NestingLevel + 1" />
+                        </div>
+                    </div>
+                }
+                else if (propertySchema.Reference != null)
+                {
+                    <div class="property-nested schema-nested">
+                        <SchemaTree Schema="Document.Components.Schemas[propertySchema.Reference.Id]" Document="Document" NestingLevel="NestingLevel + 1" />
+                    </div>
+                }
+            </div>
+        }
     }
     else if (Schema?.Type == "array")
     {
@@ -71,7 +54,6 @@
                 }
                 <span class="schema-toggle">@(IsExpanded ? "▼" : "▶")</span>
             </div>
-            
             @if (IsExpanded)
             {
                 <div class="schema-content">
@@ -79,13 +61,12 @@
                     {
                         <div class="schema-description">@Schema.Description</div>
                     }
-                    
                     @if (Schema.Items != null)
                     {
                         <div class="array-items">
                             <div class="array-items-label">Items:</div>
                             <div class="array-items-content">
-                                <SchemaTree Schema="Schema.Items" />
+                                <SchemaTree Schema="Schema.Items" Document="Document" NestingLevel="NestingLevel + 1" />
                             </div>
                         </div>
                     }
@@ -93,7 +74,7 @@
             }
         </div>
     }
-    else if (Schema?.Reference != null)
+    else if (Schema?.Reference != null && Document?.Components?.Schemas?.ContainsKey(Schema.Reference.Id) == true)
     {
         <div class="schema-reference">
             <div class="schema-header" @onclick="ToggleExpanded">
@@ -101,28 +82,27 @@
                 <span class="reference-name">@Schema.Reference.Id</span>
                 <span class="schema-toggle">@(IsExpanded ? "▼" : "▶")</span>
             </div>
-            
-            @if (IsExpanded && Document?.Components?.Schemas?.ContainsKey(Schema.Reference.Id) == true)
+            @if (IsExpanded)
             {
                 <div class="schema-content">
-                    <SchemaTree Schema="Document.Components.Schemas[Schema.Reference.Id]" />
+                    <SchemaTree Schema="Document.Components.Schemas[Schema.Reference.Id]" Document="Document" NestingLevel="NestingLevel + 1" />
                 </div>
             }
         </div>
     }
-    else
+    else if (Schema != null)
     {
         <div class="schema-primitive">
             <span class="schema-type">@GetTypeDisplay(Schema)</span>
-            @if (!string.IsNullOrEmpty(Schema?.Description))
+            @if (!string.IsNullOrEmpty(Schema.Description))
             {
                 <span class="schema-description">@Schema.Description</span>
             }
-            @if (Schema?.Format != null)
+            @if (Schema.Format != null)
             {
                 <span class="schema-format">(@Schema.Format)</span>
             }
-            @if (Schema?.Enum?.Any() == true)
+            @if (Schema.Enum?.Any() == true)
             {
                 <div class="schema-enum">
                     <span class="enum-label">Values:</span>
@@ -140,6 +120,9 @@
     [CascadingParameter]
     public required OpenApiDocument Document { get; set; }
 
+    [Parameter]
+    public int NestingLevel { get; set; } = 0;
+
     private bool IsExpanded { get; set; } = true;
 
     private void ToggleExpanded()
@@ -150,29 +133,24 @@
     private string GetTypeDisplay(OpenApiSchema? schema)
     {
         if (schema == null) return "unknown";
-        
         if (schema.Reference != null)
         {
             return $"ref: {schema.Reference.Id}";
         }
-        
         if (schema.Type == "array")
         {
             var itemType = GetTypeDisplay(schema.Items);
             return $"{itemType}[]";
         }
-        
         if (schema.Type == "object")
         {
-            return "object";
+            return null; // Don't show 'object' label
         }
-        
         var type = schema.Type ?? "unknown";
         if (!string.IsNullOrEmpty(schema.Format))
         {
             return $"{type} ({schema.Format})";
         }
-        
         return type;
     }
 }

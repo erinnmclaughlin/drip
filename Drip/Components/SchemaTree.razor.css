@@ -69,14 +69,25 @@
 }
 
 .schema-property {
-    border: 1px solid var(--property-border, #f0f0f0);
-    border-radius: 4px;
-    padding: 8px;
-    background: var(--property-background, #fafafa);
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border-light, #23272b);
+    position: relative;
+}
+
+.schema-property:last-child {
+    border-bottom: none;
 }
 
 .schema-property.required {
-    border-left: 3px solid var(--required-color, #dc3545);
+    border-left: 2px solid #e74c3c;
+    padding-left: 10px;
+    background: rgba(231, 76, 60, 0.03);
+}
+
+.schema-nested {
+    margin-left: 14px;
+    border-left: 1px solid var(--border-light, #23272b);
+    padding-left: 10px;
 }
 
 .property-header {
