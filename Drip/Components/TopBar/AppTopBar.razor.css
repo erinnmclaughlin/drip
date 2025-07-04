@@ -155,9 +155,6 @@
         padding: var(--spacing-xs) var(--spacing-sm);
     }
     
-    .logo {
-        font-size: var(--font-size-md);
-    }
     
     .top-bar-actions {
         gap: var(--spacing-xs);
@@ -168,7 +165,7 @@
         display: none;
     }
     
-    .icon-button {
+    ::deep .icon-button {
         width: 32px;
         height: 32px;
     }
@@ -176,11 +173,7 @@
 
 @media (max-width: 480px) {
     .top-bar {
-        padding: var(--spacing-xs);
-    }
-    
-    .logo {
-        font-size: var(--font-size-sm);
+        padding: var(--spacing-sm);
     }
     
     .top-bar-actions {
@@ -190,15 +183,5 @@
     /* Hide document selector on mobile */
     .top-bar-actions > div:first-child {
         display: none;
-    }
-    
-    .icon-button {
-        width: 28px;
-        height: 28px;
-    }
-    
-    .icon-button svg {
-        width: 14px;
-        height: 14px;
     }
 }

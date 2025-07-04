@@ -442,10 +442,8 @@
 
 @media (max-width: 480px) {
     .home-container {
-        padding-top: var(--spacing-md);
-        padding-bottom: var(--spacing-lg);
-        padding-left: var(--spacing-xs);
-        padding-right: var(--spacing-xs);
+        padding-top: var(--spacing-xl);
+        padding-left: var(--spacing-md);
     }
     
     .hero-section {
