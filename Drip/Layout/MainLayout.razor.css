@@ -180,6 +180,20 @@
     color: var(--text-primary);
 }
 
+.nav-link.active {
+    background: var(--background-hover);
+    color: var(--text-primary) !important;
+    font-weight: var(--font-weight-medium);
+    border-left: 3px solid var(--accent-info);
+    text-decoration: none !important;
+    padding-left: calc(var(--spacing-sm) + 3px);
+}
+
+.nav-link.active:hover {
+    color: var(--text-primary) !important;
+    text-decoration: none !important;
+}
+
 .nav-link-method {
     flex-shrink: 0;
     margin-left: var(--spacing-sm);

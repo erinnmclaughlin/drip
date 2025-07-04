@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject HttpClient HttpClient
 @inject IJSRuntime JS
+@inject NavigationManager Navigation
 
 <div class="app-container">
     <header class="top-bar">
@@ -34,14 +35,21 @@
     <div class="main-content">
         <aside class="sidebar">
             <nav class="sidebar-nav">
+                <div class="nav-item">
+                    <a href="/" class="nav-link @(IsHomePage() ? "active" : "")">
+                        <span class="nav-link-text">Home</span>
+                    </a>
+                </div>
                 @for (var i = 0; i < OpenApiDocument?.Tags.Count; i++)
                 {
                     var index = i;
                     var tag = OpenApiDocument.Tags.ElementAt(i);
+                    var hasActiveOperation = HasActiveOperationInTag(tag);
+                    var isDropdownExpanded = hasActiveOperation || IsDropdownExpanded(index);
                     
                     <div class="nav-item">
-                        <div class="nav-dropdown" id="nav-dropdown-@index">
-                            <button type="button" class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown-@index').classList.toggle('expanded')">
+                        <div class="nav-dropdown @(isDropdownExpanded ? "expanded" : "")" id="nav-dropdown-@index">
+                            <button type="button" class="nav-dropdown-toggle @(hasActiveOperation ? "active" : "")" @onclick="() => ToggleDropdown(index)">
                                 <span class="nav-dropdown-icon">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="6,9 12,15 18,9"></polyline>
@@ -62,8 +70,9 @@
                                 {
                                     foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
                                     {
+                                        var isActive = IsActiveOperation(operation.OperationId);
                                         <div class="nav-dropdown-item">
-                                            <a href="@operation.OperationId" class="nav-link">
+                                            <a href="/@operation.OperationId" class="nav-link @(isActive ? "active" : "")">
                                                 <span class="nav-dropdown-icon nav-dropdown-spacer"></span>
                                                 <span class="nav-link-text">
                                                     @(operation.Summary ?? path)
@@ -104,6 +113,7 @@
     private OpenApiDocument? OpenApiDocument { get; set; }
     private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
     private string currentTheme = "dark";
+    private HashSet<int> expandedDropdowns = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -119,5 +129,57 @@
         await JS.InvokeVoidAsync("toggleTheme");
         currentTheme = await JS.InvokeAsync<string>("getCurrentTheme");
         StateHasChanged();
+    }
+
+    private void ToggleDropdown(int index)
+    {
+        if (expandedDropdowns.Contains(index))
+        {
+            expandedDropdowns.Remove(index);
+        }
+        else
+        {
+            expandedDropdowns.Add(index);
+        }
+        StateHasChanged();
+    }
+
+    private bool IsDropdownExpanded(int index)
+    {
+        return expandedDropdowns.Contains(index);
+    }
+
+    private bool IsActiveOperation(string operationId)
+    {
+        var currentUri = Navigation.Uri;
+        var segments = currentUri.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        return segments.Length > 0 && segments[^1] == operationId;
+    }
+
+    private bool HasActiveOperationInTag(OpenApiTag tag)
+    {
+        if (OpenApiDocument?.Paths == null) return false;
+        
+        foreach (var (path, pathItem) in OpenApiDocument.Paths)
+        {
+            foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+            {
+                if (IsActiveOperation(operation.OperationId))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private bool IsHomePage()
+    {
+        var currentUri = Navigation.Uri;
+        var uri = new Uri(currentUri);
+        var path = uri.AbsolutePath;
+        
+        // Check if we're at the root path or if the path is just "/"
+        return path == "/" || path == "" || path.Length == 0;
     }
 }

@@ -94,6 +94,12 @@
     gap: var(--spacing-lg);
 }
 
+.operation-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .operation-card {
     background: var(--background-tertiary);
     border-radius: var(--radius-lg);

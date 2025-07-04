@@ -35,21 +35,23 @@
                     {
                         foreach (var (method, methodItem) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
                         {
-                            <div class="operation-card">
-                                <div class="operation-header">
-                                    <span class="operation-method">
-                                        <OperationTypeTag OperationType="method"/>
-                                    </span>
-                                    <h3 class="operation-title">
-                                        @(methodItem.Summary ?? path)
-                                    </h3>
+                            <a href="/@(methodItem.OperationId)" class="operation-card-link">
+                                <div class="operation-card">
+                                    <div class="operation-header">
+                                        <span class="operation-method">
+                                            <OperationTypeTag OperationType="method"/>
+                                        </span>
+                                        <h3 class="operation-title">
+                                            @(methodItem.Summary ?? path)
+                                        </h3>
+                                    </div>
+                                    @if (methodItem.Description != null)
+                                    {
+                                        <p class="operation-description">@methodItem.Description</p>
+                                    }
+                                    <div class="operation-path">@path</div>
                                 </div>
-                                @if (methodItem.Description != null)
-                                {
-                                    <p class="operation-description">@methodItem.Description</p>
-                                }
-                                <div class="operation-path">@path</div>
-                            </div>
+                            </a>
                         }
                     }
                 </div>
