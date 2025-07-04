@@ -17,19 +17,14 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore Drip/Drip.csproj
-
-      - name: Build
-        run: dotnet build Drip/Drip.csproj --configuration Release --no-restore
+      - name: Install .NET WASM Build Tools
+        run: dotnet workload install wasm-tools
 
       - name: Publish
-        run: dotnet publish Drip/Drip.csproj --configuration Release --nologo
-
+        run: dotnet publish ./Drip/Drip.csproj -c:Release -p:GHPages=true -o dist --nologo
+      
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Drip/bin/Release/net9.0/publish/wwwroot
-          publish_branch: gh-pages
-          force_orphan: true 
+          folder: dist/wwwroot
+          single-commit: true
