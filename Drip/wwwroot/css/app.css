@@ -26,6 +26,10 @@ code,
     font-size: var(--font-size-sm);
 }
 
+.icon {
+    margin-right: 8px;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid var(--accent-success);
 }
