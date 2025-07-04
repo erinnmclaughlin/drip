@@ -2,51 +2,65 @@
 
 <PageTitle>Home</PageTitle>
 
-<div style="padding: 1rem 2rem;">
-    <h1>@OpenApiDocument.Info.Title</h1>
-    <span class="tags">
-        <span class="tag">v@(OpenApiDocument.Info.Version)</span>
-    </span>
-    @if (OpenApiDocument.Info.Description != null)
-    {
-        <p>@((MarkupString)Markdown.ToHtml(OpenApiDocument.Info.Description))</p>
-    }
-</div>
-    
-<hr/>
-
-@foreach (var tag in OpenApiDocument.Tags)
-{
-    <div class="tag-group">
-        <h2 class="tag-name">@tag.Name</h2>
-            
-        @if (tag.Description != null)
-        {
-            <p class="tag-description">@tag.Description</p>
-        }
-    </div>
-            
-    <div class="operation-group">
-        @foreach (var (path, pathItem) in OpenApiDocument.Paths)
-        {
-            foreach (var (method, methodItem) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+<div class="home-container">
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">@OpenApiDocument.Info.Title</h1>
+            <div class="hero-tags">
+                <span class="version-tag">v@(OpenApiDocument.Info.Version)</span>
+            </div>
+            @if (OpenApiDocument.Info.Description != null)
             {
-                <div class="operation">
-                    <span class="operation-method">
-                        <OperationTypeTag OperationType="method"/>
-                    </span>
-                    <span class="operation-title">
-                        @(methodItem.Summary ?? path)
-                    </span>
+                <div class="hero-description">
+                    @((MarkupString)Markdown.ToHtml(OpenApiDocument.Info.Description))
                 </div>
             }
+        </div>
+    </div>
+    
+    <div class="api-sections">
+        @foreach (var tag in OpenApiDocument.Tags)
+        {
+            <div class="api-section">
+                <div class="section-header">
+                    <h2 class="section-title">@tag.Name</h2>
+                    @if (tag.Description != null)
+                    {
+                        <p class="section-subtitle">@tag.Description</p>
+                    }
+                </div>
+                
+                <div class="operations-grid">
+                    @foreach (var (path, pathItem) in OpenApiDocument.Paths)
+                    {
+                        foreach (var (method, methodItem) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+                        {
+                            <a href="/@(methodItem.OperationId)" class="operation-card-link">
+                                <div class="operation-card">
+                                    <div class="operation-header">
+                                        <span class="operation-method">
+                                            <OperationTypeTag OperationType="method"/>
+                                        </span>
+                                        <h3 class="operation-title">
+                                            @(methodItem.Summary ?? path)
+                                        </h3>
+                                    </div>
+                                    @if (methodItem.Description != null)
+                                    {
+                                        <p class="operation-description">@methodItem.Description</p>
+                                    }
+                                    <div class="operation-path">@path</div>
+                                </div>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
         }
     </div>
-}
+</div>
 
 @code {
-
     [CascadingParameter]
     public required OpenApiDocument OpenApiDocument { get; set; }
-
 }

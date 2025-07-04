@@ -1,61 +1,120 @@
 ﻿@inherits LayoutComponentBase
 @inject HttpClient HttpClient
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
 
-<div class="top-bar">
-    <strong>drip</strong>
-    <button type="button" onclick="document.documentElement.classList.toggle('dark')">
-        Toggle Dark Mode
-    </button>
-</div>
-<div class="main-content">
-    <aside class="sidebar">
-        @for (var i = 0; i < OpenApiDocument?.Tags.Count; i++)
-        {
-            var index = i;
-            var tag = OpenApiDocument.Tags.ElementAt(i);
-            
-            <div class="nav-item">
-                <div class="nav-dropdown" id="nav-dropdown-@index">
-                    <button type="button" class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown-@index').classList.toggle('expanded')">
-                        <span class="icon">></span>
-                        <span class="button-text">@tag.Name</span>
-                    </button>
-                    <div class="nav-dropdown-content">
-                        @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
-                        {
-                            foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
-                            {
-                                <div class="nav-dropdown-item">
-                                    <a href="@operation.OperationId">
-                                        @(operation.Summary ?? path)
-                                    </a>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
+<div class="app-container">
+    <header class="top-bar">
+        <div class="top-bar-content">
+            <div class="logo">
+                <a href="/" class="logo-link">
+                    <svg class="logo-raindrop" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10 2C10 2 4 9 4 13a6 6 0 0 0 12 0c0-4-6-11-6-11z" fill="#3fa7f4" stroke="none"/>
+                      <path d="M10 2C10 2 4 9 4 13a6 6 0 0 0 12 0c0-4-6-11-6-11z" />
+                    </svg>
+                    <strong>drip</strong>
+                </a>
             </div>
-            
-        }
-    </aside>
-    <main>
-        @if (OpenApiDocument is null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <CascadingValue Value="OpenApiDocument">
-                @Body
-            </CascadingValue>
-        }
-    </main>
+            <div class="top-bar-actions">
+                <button type="button" class="icon-button" title="Toggle Light/Dark Mode" aria-label="Toggle Light/Dark Mode" @onclick="ToggleTheme">
+                    @if (currentTheme == "light")
+                    {
+                        <!-- Sun icon -->
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    }
+                    else
+                    {
+                        <!-- Moon icon -->
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+                    }
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <div class="main-content">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-item">
+                    <a href="/" class="nav-link @(IsHomePage() ? "active" : "")">
+                        <span class="nav-link-text">Home</span>
+                    </a>
+                </div>
+                @for (var i = 0; i < OpenApiDocument?.Tags.Count; i++)
+                {
+                    var index = i;
+                    var tag = OpenApiDocument.Tags.ElementAt(i);
+                    var hasActiveOperation = HasActiveOperationInTag(tag);
+                    var isDropdownExpanded = IsDropdownExpanded(index);
+                    
+                    <div class="nav-item">
+                        <div class="nav-dropdown @(isDropdownExpanded ? "expanded" : "")" id="nav-dropdown-@index">
+                            <button type="button" class="nav-dropdown-toggle @(hasActiveOperation ? "active" : "")" @onclick="() => ToggleDropdown(index)">
+                                <span class="nav-dropdown-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6,9 12,15 18,9"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="nav-dropdown-text">@tag.Name</span>
+                                @if (tag.Description?.Contains("beta", StringComparison.OrdinalIgnoreCase) == true)
+                                {
+                                    <span class="nav-badge nav-badge-beta">BETA</span>
+                                }
+                                @if (tag.Description?.Contains("new", StringComparison.OrdinalIgnoreCase) == true)
+                                {
+                                    <span class="nav-badge nav-badge-new">NEW</span>
+                                }
+                            </button>
+                            <div class="nav-dropdown-content">
+                                @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
+                                {
+                                    foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+                                    {
+                                        var isActive = IsActiveOperation(operation.OperationId);
+                                        <div class="nav-dropdown-item">
+                                            <a href="/@operation.OperationId" class="nav-link @(isActive ? "active" : "")">
+                                                <span class="nav-dropdown-icon nav-dropdown-spacer"></span>
+                                                <span class="nav-link-text">
+                                                    @(operation.Summary ?? path)
+                                                </span>
+                                                <span class="nav-link-method">
+                                                    <OperationTypeTag OperationType="method"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </nav>
+        </aside>
+        
+        <main class="content">
+            @if (OpenApiDocument is null)
+            {
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Loading API documentation...</p>
+                </div>
+            }
+            else
+            {
+                <CascadingValue Value="OpenApiDocument">
+                    @Body
+                </CascadingValue>
+            }
+        </main>
+    </div>
 </div>
 
 @code {
-    
     private OpenApiDocument? OpenApiDocument { get; set; }
     private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
+    private string currentTheme = "dark";
+    private HashSet<int> expandedDropdowns = new();
+    private HashSet<int> manuallyCollapsedDropdowns = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,5 +122,98 @@
         //var stream = await HttpClient.GetStreamAsync("museum.yaml"); // 3.1.0 is not currently supported
         OpenApiDocument = new OpenApiStreamReader().Read(stream, out var diagnostic);
         OpenApiDiagnostic = diagnostic;
+        currentTheme = await JS.InvokeAsync<string>("getCurrentTheme");
+    }
+
+    private async Task ToggleTheme()
+    {
+        await JS.InvokeVoidAsync("toggleTheme");
+        currentTheme = await JS.InvokeAsync<string>("getCurrentTheme");
+        StateHasChanged();
+    }
+
+    private void ToggleDropdown(int index)
+    {
+        if (expandedDropdowns.Contains(index))
+        {
+            expandedDropdowns.Remove(index);
+            manuallyCollapsedDropdowns.Add(index);
+        }
+        else
+        {
+            expandedDropdowns.Add(index);
+            manuallyCollapsedDropdowns.Remove(index);
+        }
+        StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            // Auto-expand dropdowns that contain active operations
+            AutoExpandActiveDropdowns();
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    private void AutoExpandActiveDropdowns()
+    {
+        if (OpenApiDocument?.Tags == null) return;
+        
+        for (int i = 0; i < OpenApiDocument.Tags.Count; i++)
+        {
+            var tag = OpenApiDocument.Tags.ElementAt(i);
+            if (HasActiveOperationInTag(tag))
+            {
+                // If this dropdown contains an active operation, expand it
+                if (!expandedDropdowns.Contains(i))
+                {
+                    expandedDropdowns.Add(i);
+                    StateHasChanged();
+                }
+                // Remove from manually collapsed list since we're auto-expanding it
+                manuallyCollapsedDropdowns.Remove(i);
+            }
+        }
+    }
+
+    private bool IsDropdownExpanded(int index)
+    {
+        return expandedDropdowns.Contains(index);
+    }
+
+    private bool IsActiveOperation(string operationId)
+    {
+        var currentUri = Navigation.Uri;
+        var segments = currentUri.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        return segments.Length > 0 && segments[^1] == operationId;
+    }
+
+    private bool HasActiveOperationInTag(OpenApiTag tag)
+    {
+        if (OpenApiDocument?.Paths == null) return false;
+        
+        foreach (var (path, pathItem) in OpenApiDocument.Paths)
+        {
+            foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+            {
+                if (IsActiveOperation(operation.OperationId))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private bool IsHomePage()
+    {
+        var currentUri = Navigation.Uri;
+        var uri = new Uri(currentUri);
+        var path = uri.AbsolutePath;
+        
+        // Check if we're at the root path or if the path is just "/"
+        return path == "/" || path == "" || path.Length == 0;
     }
 }

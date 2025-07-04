@@ -1,65 +1,35 @@
 ﻿.get {
-    --foreground: white;
     --background: #2563EB;
 }
 
 .post {
-    --foreground: white;
     --background: #16A34A;
 }
 
 .put {
-    --foreground: white;
     --background: #D97706;
 }
 
 .patch {
-    --foreground: white;
     --background: #EA580C;
 }
 
 .delete {
-    --foreground: white;
     --background: #DC2626;
 }
 
-.dark .get,
-.dark .post,
-.dark .put,
-.dark .patch,
-.dark .delete {
-    --foreground: #111827;
-}
-
-
-.dark .get {
-    --background: #60A5FA;
-}
-
-.dark .post {
-    --background: #4ADE80;
-}
-
-.dark .put {
-    --background: #FBBF24;
-}
-
-.dark .patch {
-    --background: #FB923C;
-}
-
-.dark .delete {
-    --background: #F87171;
-}
-
 .tag {
-    color: var(--foreground);
+    color: #fff;
     background: var(--background);
     display: inline-block;
-    font-size: 0.8rem;
-    padding: 2px 10px;
+    font-size: var(--font-size-xs);
+    padding: 4px 8px;
     line-height: 1;
-    border-radius: 12px;
-    font-weight: 600;
-    letter-spacing: 0.025em;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: var(--font-primary);
+    width: 56px;
+    text-align: center;
 }
