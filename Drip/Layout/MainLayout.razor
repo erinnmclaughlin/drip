@@ -57,47 +57,26 @@
                     var index = i;
                     var tag = OpenApiDocument.Tags.ElementAt(i);
                     var hasActiveOperation = HasActiveOperationInTag(tag);
-                    var isDropdownExpanded = IsDropdownExpanded(index);
                     
-                    <div class="nav-item">
-                        <div class="nav-dropdown @(isDropdownExpanded ? "expanded" : "")" id="nav-dropdown-@index">
-                            <button type="button" class="nav-dropdown-toggle @(hasActiveOperation ? "active" : "")" @onclick="() => ToggleDropdown(index)">
-                                <span class="nav-dropdown-icon">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6,9 12,15 18,9"></polyline>
-                                    </svg>
-                                </span>
-                                <span class="nav-dropdown-text">@tag.Name</span>
-                                @if (tag.Description?.Contains("beta", StringComparison.OrdinalIgnoreCase) == true)
-                                {
-                                    <span class="nav-badge nav-badge-beta">BETA</span>
-                                }
-                                @if (tag.Description?.Contains("new", StringComparison.OrdinalIgnoreCase) == true)
-                                {
-                                    <span class="nav-badge nav-badge-new">NEW</span>
-                                }
-                            </button>
-                            <div class="nav-dropdown-content">
-                                @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
-                                {
-                                    foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
-                                    {
-                                        <div class="nav-dropdown-item">
-                                            <NavLink href="@operation.OperationId" class="nav-link">
-                                                <span class="nav-dropdown-icon nav-dropdown-spacer"></span>
-                                                <span class="nav-link-text">
-                                                    @(operation.Summary ?? path)
-                                                </span>
-                                                <span class="nav-link-method">
-                                                    <OperationTypeTag OperationType="method"/>
-                                                </span>
-                                            </NavLink>
-                                        </div>
-                                    }
-                                }
-                            </div>
-                        </div>
-                    </div>
+                    <NavDropdown ButtonText="@tag.Name" Index="@index" HasActiveOperation="@hasActiveOperation">
+                        @foreach (var (path, pathItem) in OpenApiDocument?.Paths ?? [])
+                        {
+                            foreach (var (method, operation) in pathItem.Operations.Where(o => o.Value.Tags.Any(t => t.Name == tag.Name)))
+                            {
+                                <div class="nav-dropdown-item">
+                                    <NavLink href="@operation.OperationId" class="nav-link">
+                                        <span class="nav-dropdown-icon nav-dropdown-spacer"></span>
+                                        <span class="nav-link-text">
+                                            @(operation.Summary ?? path)
+                                        </span>
+                                        <span class="nav-link-method">
+                                            <OperationTypeTag OperationType="method"/>
+                                        </span>
+                                    </NavLink>
+                                </div>
+                            }
+                        }
+                    </NavDropdown>
                 }
             </nav>
         </aside>
@@ -169,7 +148,7 @@
         StateHasChanged();
     }
 
-    private void ToggleDropdown(int index)
+    private async Task ToggleDropdown(int index)
     {
         if (expandedDropdowns.Contains(index))
         {
@@ -181,7 +160,7 @@
             expandedDropdowns.Add(index);
             manuallyCollapsedDropdowns.Remove(index);
         }
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     protected override void OnAfterRender(bool firstRender)
