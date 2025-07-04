@@ -237,4 +237,11 @@
 .logo-link:hover {
     color: var(--text-primary);
     text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.logo-raindrop {
+    vertical-align: middle;
+    margin-right: 8px;
 }
