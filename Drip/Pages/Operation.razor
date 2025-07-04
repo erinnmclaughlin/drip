@@ -84,7 +84,7 @@
                         <ul>
                             @foreach (var idk in OpenApiOperation.RequestBody.Content.Values.First().Schema.Properties)
                             {
-                                <li>@idk.Key</li>
+                                <li>@idk.Key (@idk.Value.Type)</li>
                             }
                         </ul>
                     </div>
@@ -115,7 +115,10 @@
                                 @if (response.Value.Content?.Any() == true)
                                 {
                                     <div class="response-content">
-                                        schema
+                                        @foreach (var idk in response.Value.Content.Values.First().Schema.Properties)
+                                        {
+                                            <li>@idk.Key (@idk.Value.Type)</li>
+                                        }
                                     </div>
                                 }
                             </div>

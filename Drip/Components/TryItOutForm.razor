@@ -108,12 +108,95 @@
         await SendApiRequest();
     }
 
+    private object? ConvertStringToType(string value, OpenApiSchema schema)
+    {
+        if (string.IsNullOrEmpty(value))
+            return null;
+
+        switch (schema.Type)
+        {
+            case "integer":
+                if (int.TryParse(value, out var i)) return i;
+                break;
+            case "number":
+                if (double.TryParse(value, out var d)) return d;
+                break;
+            case "boolean":
+                if (bool.TryParse(value, out var b)) return b;
+                break;
+            case "array":
+                // Split on comma for array input
+                if (schema.Items != null)
+                {
+                    var items = value.Split(',').Select(v => ConvertStringToType(v.Trim(), schema.Items)).ToList();
+                    return items;
+                }
+                break;
+            default:
+                return value;
+        }
+        return value; // fallback to string
+    }
+
+    private object? BuildRequestBody(OpenApiSchema schema, Dictionary<string, string> values)
+    {
+        if (schema.Type == "object" && schema.Properties != null)
+        {
+            var dict = new Dictionary<string, object?>();
+            foreach (var prop in schema.Properties)
+            {
+                if (values.TryGetValue(prop.Key, out var val))
+                {
+                    dict[prop.Key] = ConvertStringToType(val, prop.Value);
+                }
+            }
+            return dict;
+        }
+        else if (schema.Type == "array" && schema.Items != null)
+        {
+            // Assume a single input string for the array, comma-separated
+            if (values.TryGetValue("root", out var val))
+            {
+                return ConvertStringToType(val, schema);
+            }
+        }
+        else if (schema.Type != null)
+        {
+            if (values.TryGetValue("root", out var val))
+            {
+                return ConvertStringToType(val, schema);
+            }
+        }
+        return null;
+    }
+
     private Task SendApiRequest()
     {
-        // For now, just show the collected values
-        apiResponse = $"Parameters: {JsonSerializer.Serialize(parameterValues)}\n" +
-                      $"Body: {JsonSerializer.Serialize(bodyValues)}";
-                      
+        // Convert parameters
+        var convertedParams = new Dictionary<string, object?>();
+        if (OpenApiOperation?.Parameters != null)
+        {
+            foreach (var parameter in OpenApiOperation.Parameters)
+            {
+                var val = parameterValues[parameter.Name];
+                var converted = ConvertStringToType(val, parameter.Schema);
+                convertedParams[parameter.Name] = converted;
+            }
+        }
+
+        // Convert body
+        object? convertedBody = null;
+        if (OpenApiOperation?.RequestBody != null)
+        {
+            var content = OpenApiOperation.RequestBody.Content.FirstOrDefault();
+            if (content.Value?.Schema != null)
+            {
+                convertedBody = BuildRequestBody(content.Value.Schema, bodyValues);
+            }
+        }
+
+        apiResponse = $"Converted Parameters: {JsonSerializer.Serialize(convertedParams)}\n" +
+                      $"Converted Body: {JsonSerializer.Serialize(convertedBody)}";
         return Task.CompletedTask;
     }
 }
