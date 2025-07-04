@@ -6,13 +6,15 @@
         @foreach (var (propertyName, propertySchema) in Schema.Properties)
         {
             var isRequired = Schema.Required?.Contains(propertyName) == true;
-            <div class="schema-property @(isRequired ? "required" : "")">
+            <div class="schema-property">
                 <div class="property-header">
-                    <span class="property-name">@propertyName</span>
-                    @if (isRequired)
-                    {
-                        <span class="required-badge">required</span>
-                    }
+                    <span class="property-name">
+                        @propertyName
+                        @if (isRequired)
+                        {
+                            <span class="required-indicator">*</span>
+                        }
+                    </span>
                     <span class="property-type">@GetTypeDisplay(propertySchema)</span>
                 </div>
                 @if (!string.IsNullOrEmpty(propertySchema.Description))
@@ -22,7 +24,7 @@
                 @if (propertySchema.Type == "object" && propertySchema.Properties?.Any() == true)
                 {
                     <div class="property-nested schema-nested">
-                        <SchemaTree Schema="propertySchema" Document="Document" NestingLevel="NestingLevel + 1" />
+                        <SchemaTree Schema="propertySchema" NestingLevel="NestingLevel + 1" />
                     </div>
                 }
                 else if (propertySchema.Type == "array")
@@ -30,14 +32,14 @@
                     <div class="property-nested schema-nested">
                         <div class="array-items-label">Items:</div>
                         <div class="array-items-content">
-                            <SchemaTree Schema="propertySchema.Items" Document="Document" NestingLevel="NestingLevel + 1" />
+                            <SchemaTree Schema="propertySchema.Items" NestingLevel="NestingLevel + 1" />
                         </div>
                     </div>
                 }
                 else if (propertySchema.Reference != null)
                 {
                     <div class="property-nested schema-nested">
-                        <SchemaTree Schema="Document.Components.Schemas[propertySchema.Reference.Id]" Document="Document" NestingLevel="NestingLevel + 1" />
+                        <SchemaTree Schema="Document.Components.Schemas[propertySchema.Reference.Id]" NestingLevel="NestingLevel + 1" />
                     </div>
                 }
             </div>
@@ -66,7 +68,7 @@
                         <div class="array-items">
                             <div class="array-items-label">Items:</div>
                             <div class="array-items-content">
-                                <SchemaTree Schema="Schema.Items" Document="Document" NestingLevel="NestingLevel + 1" />
+                                <SchemaTree Schema="Schema.Items" NestingLevel="NestingLevel + 1" />
                             </div>
                         </div>
                     }
@@ -85,7 +87,7 @@
             @if (IsExpanded)
             {
                 <div class="schema-content">
-                    <SchemaTree Schema="Document.Components.Schemas[Schema.Reference.Id]" Document="Document" NestingLevel="NestingLevel + 1" />
+                    <SchemaTree Schema="Document.Components.Schemas[Schema.Reference.Id]" NestingLevel="NestingLevel + 1" />
                 </div>
             }
         </div>

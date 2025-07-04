@@ -4,10 +4,10 @@
 }
 
 .schema-container {
-    border: 1px solid var(--border-color, #e0e0e0);
+    border: 1px solid var(--border-default, #e0e0e0);
     border-radius: 6px;
     background: var(--background-color, #fff);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .schema-title {
@@ -34,18 +34,4 @@
     color: var(--error-color, #721c24);
     text-align: center;
     font-style: italic;
-}
-
-/* Dark theme support */
-@media (prefers-color-scheme: dark) {
-    .schema-display {
-        --border-color: #495057;
-        --background-color: #212529;
-        --title-color: #e9ecef;
-        --title-border: #4dabf7;
-        --description-color: #adb5bd;
-        --error-background: #2c1e1e;
-        --error-border: #5c2c2c;
-        --error-color: #f8d7da;
-    }
 } 
