@@ -158,13 +158,13 @@
 }
 
 .parameter-type {
-    background: var(--accent-info);
-    color: var(--text-primary);
-    padding: 2px 6px;
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    text-transform: uppercase;
+    color: var(--parameter-type-color);
+    background: var(--parameter-type-background);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 90%;
+    font-family: var(--font-mono, monospace);
+    font-weight: 500;
 }
 
 .parameter-required {

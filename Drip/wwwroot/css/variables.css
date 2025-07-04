@@ -136,6 +136,8 @@
     --shadow: var(--shadow-md);
     --shadow-2xl: var(--shadow-xl);
     --spacing: var(--spacing-xs);
+    --parameter-type-color: #1565c0;
+    --parameter-type-background: #e3f2fd;
 }
 
 .light {
@@ -226,4 +228,6 @@
     --z-modal: 2000;
     --z-tooltip: 3000;
     --z-notification: 4000;
+    --parameter-type-color: #0d47a1;
+    --parameter-type-background: #bbdefb;
 }
