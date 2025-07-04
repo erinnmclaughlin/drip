@@ -26,11 +26,9 @@
 }
 
 .schema-object,
-.schema-array,
 .schema-reference {
     border: 1px solid var(--border-default);
     border-radius: var(--radius-md);
-    margin: 4px 0;
     background: var(--card);
 }
 
