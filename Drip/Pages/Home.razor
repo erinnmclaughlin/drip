@@ -1,4 +1,7 @@
 ﻿@page "/"
+@page "/-"
+@page "/-/{TagName}"
+@page "/-/{TagName}/{Method}"
 
 <PageTitle>Home</PageTitle>
 
@@ -17,8 +20,12 @@
 </div>
 
 @code {
-
     [CascadingParameter]
     public required OpenApiDocument OpenApiDocument { get; set; }
-
+    
+    [Parameter]
+    public string? TagName { get; set; }
+    
+    [Parameter]
+    public string? Method { get; set; }
 }

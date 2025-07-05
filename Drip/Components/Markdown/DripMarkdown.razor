@@ -17,8 +17,8 @@
     private static string RenderMarkdownWithLinksNewTab(string markdown)
     {
         var html = Markdown.ToHtml(markdown, MarkdownPipeline);
-        
-        Console.WriteLine(markdown);
+
+        html = html.Replace("#tag", "-");
         
         // Add target="_blank" and rel="noopener noreferrer" to all <a> tags
         return System.Text.RegularExpressions.Regex.Replace(
