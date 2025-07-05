@@ -1,7 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @using Drip.Components.TopBar
 @inject NavigationManager NavigationManager
-@inject ThemeService ThemeService
 @inject OpenApiService OpenApiService
 @inject OpenApiStateService StateService
 @implements IDisposable
@@ -62,9 +61,6 @@
         </div>
         <div class="status-right">
             <div class="status-item">
-                <span>@_currentTheme.ToUpper()</span>
-            </div>
-            <div class="status-item">
                 <span>@DateTime.Now.ToString("HH:mm")</span>
             </div>
             <div class="status-item">
@@ -75,7 +71,6 @@
 </div>
 
 @code {
-    private string _currentTheme = "dark";
     private bool IsSidebarOpen { get; set; } // Start closed by default
     
     private OpenApiDocument? OpenApiDocument { get; set; }
@@ -85,7 +80,6 @@
     {
         // Subscribe to document changes
         StateService.OnDocumentChanged += HandleDocumentChanged;
-        ThemeService.OnThemeChanged += HandleThemeChanged;
         NavigationManager.LocationChanged += HandleLocationChanged;
         
         // Load default document if no documents are available
@@ -94,36 +88,20 @@
             var document = await OpenApiService.LoadDefaultDocumentAsync();
             if (document != null)
             {
-                StateService.SetDocument(document, "default");
+                StateService.SetDocument(document);
             }
         }
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            _currentTheme = await ThemeService.GetThemeAsync();
-            StateHasChanged();
-        }
-    }
-
+    
     public void Dispose()
     {
         StateService.OnDocumentChanged -= HandleDocumentChanged;
-        ThemeService.OnThemeChanged -= HandleThemeChanged;
         NavigationManager.LocationChanged -= HandleLocationChanged;
     }
 
     private void CloseSidebar()
     {
         IsSidebarOpen = false;
-        StateHasChanged();
-    }
-
-    private void HandleThemeChanged(string theme)
-    {
-        _currentTheme = theme;
         StateHasChanged();
     }
 

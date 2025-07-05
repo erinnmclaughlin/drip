@@ -6,6 +6,16 @@
     --content-header-height: 32px;
 }
 
+.dark-mode-only,
+.dark .light-mode-only {
+     display: none;
+ }
+
+.light-mode-only,
+.dark .dark-mode-only {
+    display: contents;
+}
+
 /* Terminal-specific scrollbar styling */
 ::-webkit-scrollbar {
     width: 8px;

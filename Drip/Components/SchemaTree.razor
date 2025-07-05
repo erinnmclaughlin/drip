@@ -132,7 +132,7 @@
         IsExpanded = !IsExpanded;
     }
 
-    private string GetTypeDisplay(OpenApiSchema? schema)
+    private static string? GetTypeDisplay(OpenApiSchema? schema)
     {
         if (schema == null) return "unknown";
         if (schema.Reference != null)
