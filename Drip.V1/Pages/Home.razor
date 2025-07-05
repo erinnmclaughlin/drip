@@ -1,0 +1,102 @@
+﻿@page "/"
+
+<PageTitle>drip</PageTitle>
+
+<div class="home-container">
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">@OpenApiDocument.Info.Title</h1>
+            <div class="hero-tags">
+                <span class="version-tag">v@(OpenApiDocument.Info.Version)</span>
+            </div>
+            @if (OpenApiDocument.Servers != null && OpenApiDocument.Servers.Count > 0)
+            {
+                var url = OpenApiDocument.Servers[0].Url;
+                <div class="api-info-url-full">
+                    @url
+                </div>
+            }
+            @if (OpenApiDocument.Info.Description != null)
+            {
+                <div class="hero-description">
+                    @((MarkupString)RenderMarkdownWithLinksNewTab(OpenApiDocument.Info.Description))
+                </div>
+            }
+            
+            <!-- Terminal-style status indicators -->
+            <div class="status-indicators">
+                <div class="status-indicator">
+                    <span>@OpenApiDocument.Paths.Count endpoints available</span>
+                </div>
+                <div class="status-indicator">
+                    <span>@OpenApiDocument.Tags.Count categories</span>
+                </div>
+                <div class="status-indicator">
+                    <span>API Documentation Ready</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="api-sections">
+        @foreach (var tag in OpenApiDocument.Tags)
+        {
+            <div class="api-section">
+                <div class="section-header">
+                    <h2 class="section-title">@tag.Name</h2>
+                    @if (tag.Description != null)
+                    {
+                        <p class="section-subtitle">@tag.Description</p>
+                    }
+                </div>
+                
+                <div class="operations-grid">
+                    @foreach (var (path, pathItem) in OpenApiDocument.Paths)
+                    {
+                        foreach (var (method, methodItem) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
+                        {
+                            <a href="@(methodItem.OperationId)" class="operation-card-link">
+                                <div class="operation-card">
+                                    <div class="operation-header">
+                                        <span class="operation-method">
+                                            <OperationTypeTag OperationType="method"/>
+                                        </span>
+                                        <h3 class="operation-title">
+                                            @(methodItem.Summary ?? path)
+                                        </h3>
+                                    </div>
+                                    @if (methodItem.Description != null)
+                                    {
+                                        <p class="operation-description">@methodItem.Description</p>
+                                    }
+                                    
+                                    <!-- Terminal-style API command example -->
+                                    <div class="api-command">
+                                        @method.ToString().ToUpper() @(OpenApiDocument.Servers?.FirstOrDefault()?.Url ?? "")@path
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public required OpenApiDocument OpenApiDocument { get; set; }
+
+    private string RenderMarkdownWithLinksNewTab(string markdown)
+    {
+        var html = Markdown.ToHtml(markdown ?? "");
+        // Add target="_blank" and rel="noopener noreferrer" to all <a> tags
+        return System.Text.RegularExpressions.Regex.Replace(
+            html,
+            "<a\\s",
+            "<a target=\"_blank\" rel=\"noopener noreferrer\" ",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+    }
+}

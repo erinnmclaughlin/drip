@@ -1,0 +1,119 @@
+﻿@inherits LayoutComponentBase
+@using Drip.Components.TopBar
+@inject NavigationManager NavigationManager
+@inject OpenApiService OpenApiService
+@inject OpenApiStateService StateService
+@implements IDisposable
+
+<div class="app-container">
+    <AppTopBar @bind-SidebarOpen="IsSidebarOpen" />
+    
+    <div class="main-content">
+        <CascadingValue Value="OpenApiDocument">
+            <aside class="sidebar @(IsSidebarOpen ? "sidebar-open" : "sidebar-closed")">
+                <div class="content-header">
+                    <span>EXPLORER</span>
+                    <button class="sidebar-close-btn" @onclick="CloseSidebar" aria-label="Close sidebar">
+                        @AppIcon.Close()
+                    </button>
+                </div>
+                <Drip.Components.SideBar.AppSideBar />
+            </aside>
+            
+            <!-- Mobile overlay for sidebar -->
+            @if (IsSidebarOpen)
+            {
+                <div class="sidebar-overlay" @onclick="CloseSidebar"></div>
+            }
+            
+            <main class="content">
+                <div class="content-header">TERMINAL</div>
+                @if (OpenApiDocument is null)
+                {
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text">Loading API documentation...</p>
+                    </div>
+                }
+                else
+                {
+                    @Body
+                }
+            </main>
+        </CascadingValue>
+    </div>
+    
+    <!-- Terminal-style status bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <div class="status-item">
+                <span>DRIP</span>
+            </div>
+            @if (OpenApiDocument != null)
+            {
+                <div class="status-item">
+                    <span>@OpenApiDocument.Info.Title v@(OpenApiDocument.Info.Version)</span>
+                </div>
+                <div class="status-item">
+                    <span>@OpenApiDocument.Paths.Count endpoints</span>
+                </div>
+            }
+        </div>
+        <div class="status-right">
+            <div class="status-item">
+                <span>@DateTime.Now.ToString("HH:mm")</span>
+            </div>
+            <div class="status-item">
+                <span>@(OpenApiDocument != null ? "READY" : "LOADING")</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool IsSidebarOpen { get; set; } // Start closed by default
+    
+    private OpenApiDocument? OpenApiDocument { get; set; }
+    private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Subscribe to document changes
+        StateService.OnDocumentChanged += HandleDocumentChanged;
+        NavigationManager.LocationChanged += HandleLocationChanged;
+        
+        // Load default document if no documents are available
+        if (!StateService.AllDocuments.Any())
+        {
+            var document = await OpenApiService.LoadDefaultDocumentAsync();
+            if (document != null)
+            {
+                StateService.SetDocument(document);
+            }
+        }
+    }
+    
+    public void Dispose()
+    {
+        StateService.OnDocumentChanged -= HandleDocumentChanged;
+        NavigationManager.LocationChanged -= HandleLocationChanged;
+    }
+
+    private void CloseSidebar()
+    {
+        IsSidebarOpen = false;
+        StateHasChanged();
+    }
+
+    private void HandleDocumentChanged()
+    {
+        OpenApiDocument = StateService.CurrentDocument;
+        StateHasChanged();
+    }
+    
+    private void HandleLocationChanged(object? o, LocationChangedEventArgs? e)
+    {
+        IsSidebarOpen = false;
+        StateHasChanged();
+    }
+}
