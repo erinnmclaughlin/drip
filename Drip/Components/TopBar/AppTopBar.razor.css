@@ -37,7 +37,6 @@
     cursor: pointer;
     padding: var(--spacing-xs);
     border-radius: var(--radius-sm);
-    transition: all var(--transition-normal);
     align-items: center;
     justify-content: center;
 }
@@ -106,8 +105,6 @@
     text-decoration: none;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
-    font-family: var(--font-monospace);
-    transition: all var(--transition-normal);
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -130,9 +127,7 @@
     background: var(--background-tertiary);
     border: 1px solid var(--border-default);
     color: var(--text-secondary);
-    transition: all var(--transition-normal);
     cursor: pointer;
-    font-family: var(--font-monospace);
     text-decoration: none;
 }
 

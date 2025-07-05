@@ -3,7 +3,6 @@
     margin: 0 auto;
     padding-top: 32px;
     padding-bottom: 64px;
-    font-family: var(--font-primary);
     padding-left: var(--spacing-md);
     padding-right: var(--spacing-md);
 }
@@ -16,7 +15,6 @@
     border: 1px solid var(--border-terminal);
     box-shadow: var(--shadow-sm);
     position: relative;
-    font-family: var(--font-monospace);
     padding-bottom: 0;
 }
 
@@ -48,7 +46,6 @@
     margin-top: var(--spacing-sm);
     margin-bottom: var(--spacing-sm);
     line-height: var(--line-height-tight);
-    font-family: var(--font-monospace);
     position: relative;
 }
 
@@ -74,7 +71,6 @@
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-family: var(--font-monospace);
     border: 1px solid var(--accent-info);
     box-shadow: var(--glow-primary);
 }
@@ -83,7 +79,6 @@
     color: var(--text-secondary);
     font-size: var(--font-size-md);
     line-height: var(--line-height-relaxed);
-    font-family: var(--font-primary);
     background: var(--background-code-block);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
@@ -93,13 +88,11 @@
 
 .hero-description ::deep(p) {
     margin: 0;
-    font-family: var(--font-primary);
 }
 
 .hero-description ::deep(a) {
     color: var(--text-link);
     text-decoration: none;
-    font-family: var(--font-monospace);
 }
 
 .hero-description ::deep(a:hover) {
@@ -123,7 +116,6 @@
 .section-header::before {
     content: "// ";
     color: var(--accent-info);
-    font-family: var(--font-monospace);
     font-size: var(--font-size-sm);
 }
 
@@ -132,7 +124,6 @@
     font-weight: var(--font-weight-semibold);
     color: var(--text-primary);
     margin-bottom: var(--spacing-sm);
-    font-family: var(--font-monospace);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -142,7 +133,6 @@
     color: var(--text-secondary);
     line-height: var(--line-height-relaxed);
     margin: 0;
-    font-family: var(--font-primary);
 }
 
 .operations-grid {
@@ -163,9 +153,7 @@
     padding: var(--spacing-lg);
     border: 1px solid var(--border-terminal);
     box-shadow: var(--shadow-sm);
-    transition: all var(--transition-normal);
     cursor: pointer;
-    font-family: var(--font-primary);
     position: relative;
     overflow: hidden;
     height: 100%;
@@ -174,7 +162,6 @@
 }
 
 .operation-card:hover {
-    box-shadow: var(--shadow-md);
     transform: translateY(-2px);
     border-color: var(--border-focus);
     box-shadow: var(--glow-primary);
@@ -198,7 +185,6 @@
     color: var(--text-primary);
     margin: 0;
     line-height: var(--line-height-tight);
-    font-family: var(--font-monospace);
 }
 
 .operation-description {
@@ -207,11 +193,9 @@
     line-height: var(--line-height-relaxed);
     margin: 0;
     margin-bottom: var(--spacing-md);
-    font-family: var(--font-primary);
 }
 
 .operation-path {
-    font-family: var(--font-monospace);
     font-size: var(--font-size-sm);
     color: var(--text-code);
     background: var(--background-code-block);
@@ -235,31 +219,26 @@
     gap: 8px;
     margin-top: 10px;
     font-size: 15px;
-    font-family: var(--font-monospace);
 }
 
 .api-info-label {
     color: var(--text-secondary);
     font-weight: 500;
     margin-right: 2px;
-    font-family: var(--font-monospace);
 }
 
 .api-info-url {
-    font-family: var(--font-monospace);
     font-size: var(--font-size-sm);
     color: var(--text-link);
     background: var(--background-code-block);
     padding: var(--spacing-xs) var(--spacing-sm);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-light);
-    font-family: var(--font-monospace);
 }
 
 .api-info-url a {
     color: var(--text-link);
     text-decoration: none;
-    font-family: var(--font-monospace);
 }
 
 .api-info-url a:hover {
@@ -268,7 +247,6 @@
 }
 
 .api-info-url-full {
-    font-family: var(--font-monospace);
     font-size: var(--font-size-sm);
     color: var(--text-code);
     background: var(--background-code-block);
@@ -293,7 +271,6 @@
     border-radius: var(--radius-sm);
     padding: var(--spacing-md);
     margin: var(--spacing-md) 0;
-    font-family: var(--font-monospace);
     font-size: var(--font-size-sm);
     color: var(--text-code);
     position: relative;
@@ -320,7 +297,6 @@
     align-items: center;
     gap: var(--spacing-xs);
     font-size: var(--font-size-xs);
-    font-family: var(--font-monospace);
     color: var(--text-secondary);
     width: fit-content;
 }
@@ -342,7 +318,6 @@
 /* Terminal-style breadcrumbs */
 .breadcrumb-nav {
     margin-bottom: var(--spacing-lg);
-    font-family: var(--font-monospace);
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
 }

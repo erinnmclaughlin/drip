@@ -47,7 +47,7 @@
 }
 
 html {
-    font-family: var(--font-primary);
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
     background: var(--background-primary);
     color: var(--text-primary);
     scroll-behavior: smooth;
@@ -137,7 +137,6 @@ pre code {
     right: var(--spacing-lg);
     top: var(--spacing-md);
     color: var(--text-secondary);
-    transition: color var(--transition-normal);
     min-width: 44px;
     min-height: 44px;
     display: flex;
@@ -183,7 +182,6 @@ pre code {
 .loading-progress circle:last-child {
     stroke: var(--accent-info);
     stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
-    transition: stroke-dasharray 0.05s ease-in-out;
 }
 
 .loading-progress-text {
@@ -221,7 +219,6 @@ pre code {
 a {
     color: var(--text-link);
     text-decoration: none;
-    transition: color var(--transition-normal);
 }
 
 a:hover {
@@ -236,7 +233,6 @@ button {
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     border-radius: var(--radius-sm);
-    transition: all var(--transition-normal);
     cursor: pointer;
     border: 1px solid var(--border-default);
     background: var(--background-secondary);
@@ -265,7 +261,6 @@ input, textarea, select {
     border: 1px solid var(--border-default);
     border-radius: var(--radius-sm);
     padding: var(--spacing-sm) var(--spacing-md);
-    transition: all var(--transition-normal);
 }
 
 input:focus, textarea:focus, select:focus {
@@ -441,7 +436,6 @@ tr:hover {
 .progress-bar {
     background: var(--accent-info);
     height: 100%;
-    transition: width var(--transition-normal);
 }
 
 /* Terminal-style breadcrumbs */
@@ -496,144 +490,6 @@ tr:hover {
     content: "$ ";
     color: var(--accent-success);
     font-weight: var(--font-weight-bold);
-}
-
-/* Terminal-style file tree */
-.file-tree {
-    font-family: var(--font-monospace);
-    font-size: var(--font-size-sm);
-}
-
-.file-tree-item {
-    padding: 2px 0;
-    cursor: pointer;
-    transition: background var(--transition-fast);
-}
-
-.file-tree-item:hover {
-    background: var(--background-hover);
-}
-
-.file-tree-item.active {
-    background: var(--terminal-selection);
-    color: var(--text-primary);
-}
-
-/* Terminal-style syntax highlighting */
-.syntax-keyword { color: var(--accent-info); }
-.syntax-string { color: var(--accent-success); }
-.syntax-number { color: var(--accent-warning); }
-.syntax-comment { color: var(--text-muted); }
-.syntax-function { color: var(--accent-secondary); }
-.syntax-operator { color: var(--text-secondary); }
-
-/* Terminal-style animations */
-@keyframes terminal-blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-}
-
-.terminal-cursor {
-    animation: terminal-blink 1s infinite;
-    color: var(--terminal-cursor);
-}
-
-@keyframes terminal-fade-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.terminal-fade-in {
-    animation: terminal-fade-in 0.3s ease-out;
-}
-
-/* Terminal-style typing animation */
-@keyframes terminal-type {
-    from {
-        width: 0;
-    }
-    to {
-        width: 100%;
-    }
-}
-
-.terminal-type {
-    overflow: hidden;
-    white-space: nowrap;
-    animation: terminal-type 2s steps(40, end);
-    border-right: 2px solid var(--terminal-cursor);
-}
-
-/* Terminal-style matrix rain effect (optional) */
-@keyframes matrix-rain {
-    0% {
-        transform: translateY(-100vh);
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh);
-        opacity: 0;
-    }
-}
-
-.matrix-rain {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-    overflow: hidden;
-}
-
-.matrix-rain::before {
-    content: "01";
-    position: absolute;
-    color: var(--accent-success);
-    font-family: var(--font-monospace);
-    font-size: 12px;
-    animation: matrix-rain 3s linear infinite;
-    opacity: 0.1;
-}
-
-/* Terminal-style focus effects */
-.terminal-focus:focus {
-    outline: none;
-    border-color: var(--border-focus);
-    box-shadow: var(--glow-primary);
-}
-
-/* Terminal-style hover effects */
-.terminal-hover:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-focus);
-}
-
-/* Terminal-style active effects */
-.terminal-active:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
-}
-
-/* Terminal-style disabled effects */
-.terminal-disabled:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(50%);
-}
-
-/* Terminal-style selection effects */
-.terminal-selection::selection {
-    background: var(--terminal-selection);
-    color: var(--text-primary);
 }
 
 /* Terminal-style scrollbar for all elements */

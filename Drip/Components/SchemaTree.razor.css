@@ -41,7 +41,6 @@
     border-bottom: 1px solid var(--border-default);
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.2s ease;
 }
 
 .schema-header:hover {

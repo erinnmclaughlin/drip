@@ -98,7 +98,6 @@
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
 .retry-button:hover {
@@ -175,7 +174,6 @@
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
 .primary-button:hover {
@@ -191,7 +189,6 @@
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .secondary-button:hover {

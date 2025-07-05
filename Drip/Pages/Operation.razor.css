@@ -39,7 +39,6 @@
     color: var(--text-link);
     text-decoration: none;
     font-weight: var(--font-weight-medium);
-    transition: color var(--transition-normal);
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-xs);
@@ -277,7 +276,6 @@
     border: 1px solid var(--accent-info);
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    transition: background 0.2s, color 0.2s, border 0.2s;
 }
 
 .light .content-type-tag {

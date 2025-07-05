@@ -55,7 +55,7 @@
                     {
                         foreach (var (method, methodItem) in pathItem.Operations.Where(o => o.Value.Tags.Contains(tag)))
                         {
-                            <a href="/@(methodItem.OperationId)" class="operation-card-link">
+                            <a href="@(methodItem.OperationId)" class="operation-card-link">
                                 <div class="operation-card">
                                     <div class="operation-header">
                                         <span class="operation-method">

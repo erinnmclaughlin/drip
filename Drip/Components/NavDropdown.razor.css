@@ -12,9 +12,6 @@
     font-weight: var(--font-weight-medium);
     text-align: left;
     position: relative;
-    transition: opacity 0.2s var(--transition-normal),
-                color 0.2s var(--transition-normal), 
-                background-color var(--transition-normal);
     min-height: 44px;
 }
 
@@ -40,7 +37,6 @@
 
 .nav-dropdown-text {
     flex: 1;
-    transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -52,7 +48,6 @@
     gap: var(--spacing-xs);
     padding: var(--spacing-sm) 0;
     margin-top: var(--spacing-xs);
-    transition: opacity 0.2s var(--transition-normal), color 0.2s var(--transition-normal);
     position: relative;
     padding-left: var(--spacing-md);
 }

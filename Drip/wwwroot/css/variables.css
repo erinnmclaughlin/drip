@@ -107,11 +107,6 @@
     --glow-warning: 0 0 8px rgba(240, 136, 62, 0.3);
     --glow-error: 0 0 8px rgba(248, 81, 73, 0.3);
     
-    /* Transitions */
-    --transition-fast: 0.1s ease;
-    --transition-normal: 0.2s ease;
-    --transition-slow: 0.3s ease;
-    
     /* Z-Index */
     --z-sidebar: 10;
     --z-topbar: 100;
@@ -259,10 +254,6 @@
     --glow-success: 0 0 8px rgba(26, 127, 55, 0.2);
     --glow-warning: 0 0 8px rgba(154, 103, 0, 0.2);
     --glow-error: 0 0 8px rgba(207, 34, 46, 0.2);
-
-    --transition-fast: 0.1s ease;
-    --transition-normal: 0.2s ease;
-    --transition-slow: 0.3s ease;
 
     --z-dropdown: 1000;
     --z-modal: 2000;
