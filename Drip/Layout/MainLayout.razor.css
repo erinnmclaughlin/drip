@@ -1,0 +1,36 @@
+﻿.drip-layout {
+    --drip-topbar-height: 50px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.drip-topbar {
+    background-color: var(--drip-background-secondary);
+    border-bottom: 2px solid var(--drip-border-tertiary);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--drip-topbar-height);
+}
+
+.drip-topbar ::deep .drip-button {
+    height: calc(var(--drip-topbar-height) - 0.625rem);
+    margin-right: 0.3125rem;
+}
+
+.drip-topbar ::deep .drip-icon-button {
+    width: calc(var(--drip-topbar-height) - 0.625rem);
+}
+
+.drip-main-content {
+    padding-top: var(--drip-topbar-height);
+    flex-grow: 1;
+}
+
+@media (min-width: var(--drip-breakpoint-lg)) {
+    .drip-layout {
+        --drip-topbar-height: 64px;
+    }
+}

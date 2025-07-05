@@ -1,0 +1,14 @@
+﻿.drip-button {
+    background: transparent;
+    cursor: pointer;
+    border: 1px solid var(--drip-border-default);
+    padding: 0.1rem;
+    overflow: hidden;
+}
+
+.drip-icon-button {
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

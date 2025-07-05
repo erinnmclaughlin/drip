@@ -1,0 +1,34 @@
+﻿@namespace Drip.Components
+
+<button @onclick="@OnButtonClicked" @attributes="Attributes">
+    @ChildContent
+</button>
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object?>? Attributes { get; set; }
+    
+    [Parameter, EditorRequired]
+    public required RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnButtonClicked { get; set; }
+    
+    protected override void OnParametersSet()
+    {
+        Attributes ??= [];
+
+        Attributes.TryAdd("type", "button");
+
+        var classList = Attributes.GetValueOrDefault("class")?.ToString();
+        var classes = classList?.Split(' ').ToList() ?? [];
+                
+        if (!classes.Contains("drip-button"))
+            classes.Add("drip-button");
+        if (!classes.Contains("drip-icon-button"))
+            classes.Add("drip-icon-button");
+        
+        Attributes["class"] = string.Join(' ', classes);
+    }
+
+}

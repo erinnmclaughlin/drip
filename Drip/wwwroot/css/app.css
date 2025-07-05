@@ -10,6 +10,16 @@ html, body, #app {
     height: 100%;
 }
 
+body {
+    background: var(--drip-background);
+    color: var(--drip-foreground);
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+}
+
+#app {
+    position: relative;
+}
+
 #blazor-error-ui {
     color-scheme: light only;
     background: lightyellow;

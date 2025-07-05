@@ -1,18 +1,60 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..900&family=Fira+Code:wght@300..700&display=swap');
 
-:root {
-    --theme-background: #f6f8fa;
-    --theme-foreground:  #24292f;
-}
-
 .dark {
-    --theme-background: #0d1117;
-    --theme-foreground: #f0f6fc;
     color-scheme: dark;
 }
 
-body {
-    background: var(--theme-background);
-    color: var(--theme-foreground);
-    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+/* Breakpoints */
+:root {
+    --drip-breakpoint-sm: 576px;
+    --drip-breakpoint-md: 768px;
+    --drip-breakpoint-lg: 992px;
+    --drip-breakpoint-xl: 1200px;
+    --drip-breakpoint-xxl: 1400px;
+}
+
+/* Background Colors */
+:root {
+    --drip-background: #f6f8fa;
+    --drip-background-secondary: #ffffff;
+}
+.dark {
+    --drip-background: #0d1117;
+    --drip-background-secondary: #161b22;
+}
+
+/* Foreground Colors */
+:root {
+    --drip-foreground:  #24292f;
+}
+.dark {
+    --drip-foreground: #ffffff;
+}
+
+/* Borders */
+:root {
+    --drip-border-default: #d0d7de;
+    --drip-border-secondary: #d0d7de;
+    --drip-border-tertiary: #d0d7de;
+    --drip-border-focus: #0969da;
+}
+.dark {
+    --drip-border-default: #30363d;
+    --drip-border-secondary: #21262d;
+    --drip-border-tertiary: #30363d;
+    --drip-border-focus: #58a6ff;
+}
+
+/* Shadows */
+:root {
+    --drip-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --drip-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --drip-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --drip-shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.1);
+}
+.dark {
+    --drip-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.8);
+    --drip-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.6);
+    --drip-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+    --drip-shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.4);
 }

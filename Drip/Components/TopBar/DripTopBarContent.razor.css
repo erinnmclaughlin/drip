@@ -1,0 +1,13 @@
+﻿.drip-topbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+}
+
+.drip-topbar-content-start,
+.drip-topbar-content-end {
+    display: flex;
+    align-items: center;
+}
