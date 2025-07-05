@@ -8,7 +8,8 @@
     </div>
     <div class="drip-topbar-content-end">
         <DripIconButton id="dripThemeToggler" onclick="toggleDarkMode()">
-            @DripIcons.Moon()
+            <span class="dark-mode-only">@DripIcons.Moon()</span>
+            <span class="light-mode-only">@DripIcons.Sun()</span>
         </DripIconButton>
     </div>
 </div>

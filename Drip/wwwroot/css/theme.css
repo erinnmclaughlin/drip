@@ -1,7 +1,15 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..900&family=Fira+Code:wght@300..700&display=swap');
 
-.dark {
+html.dark {
     color-scheme: dark;
+}
+
+html.dark .light-mode-only {
+    display: none;
+}
+
+html:not(.dark) .dark-mode-only {
+    display: none;
 }
 
 /* Background Colors */
