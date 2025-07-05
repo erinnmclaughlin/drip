@@ -2,18 +2,16 @@
 
 @foreach (var tag in OpenApiDocument.Tags ?? [])
 {
-    <label>@tag.Name</label>
-    <ul>
+    <DripSideBarNavGroup ButtonText="@tag.Name">
         @foreach (var (pathPrefix, path) in OpenApiDocument.Paths)
         {
             @if (path.Operations.Any(o => o.Value.Tags?.Any(t => t.Target == tag) ?? false))
             {
-                <li>@(path.Summary ?? pathPrefix)</li>
+                <div>@(path.Summary ?? pathPrefix)</div>
             }
         }
-    </ul>
+    </DripSideBarNavGroup>
 }
-
 
 @code {
 

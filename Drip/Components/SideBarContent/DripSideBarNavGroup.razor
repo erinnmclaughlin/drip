@@ -1,0 +1,54 @@
+﻿@namespace Drip.Components
+
+<div class="drip-sidebar-dropdown @(IsExpanded ? "expanded" : "")">
+    <button class="drip-sidebar-dropdown-toggle @(HasActiveOperation ? "active" : "")"  type="button" @onclick="ToggleDropdown">
+        <span class="drip-sidebar-dropdown-icon">
+            @if (IsExpanded)
+            {
+                <text>📂</text>
+            }
+            else
+            {
+                <text>📁</text>
+            }
+        </span>
+        <span class="drip-sidebar-dropdown-text">@ButtonText</span>
+    </button>
+    <div class="drip-sidebar-dropdown-content">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+
+    private OpenApiDocument? _openApiDocument;
+    private bool IsExpanded { get; set; }
+
+    [Parameter] public required string ButtonText { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool HasActiveOperation { get; set; }
+    
+    [CascadingParameter]
+    public OpenApiDocument? OpenApiDocument { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        // If the document changed, collapse the dropdown
+        if (_openApiDocument != OpenApiDocument)
+        {
+            _openApiDocument = OpenApiDocument;
+            IsExpanded = false;
+        }
+        
+        // Otherwise, if there's an "active" page within the dropdown, expand:
+        else if (HasActiveOperation)
+        {
+            IsExpanded = true;
+        }
+    }
+
+    private void ToggleDropdown()
+    {
+        IsExpanded = !IsExpanded;
+    }
+}

@@ -18,12 +18,14 @@ html:not(.dark) .dark-mode-only {
     --drip-background-secondary: #ffffff;
     --drip-background-tertiary: #f1f3f4;
     --drip-background-code-block: #ffffff;
+    --drip-background-hover: #e1e4e8;
 }
 .dark {
     --drip-background: #0d1117;
     --drip-background-secondary: #161b22;
     --drip-background-tertiary: #21262d;
     --drip-background-code-block: #21262d;
+    --drip-background-hover: #30363d;
 }
 
 /* Foreground Colors */

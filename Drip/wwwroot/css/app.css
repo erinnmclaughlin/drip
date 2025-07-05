@@ -17,6 +17,12 @@ body {
     background: var(--drip-background);
     color: var(--drip-foreground);
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+    line-height: 1.6;
+}
+
+button {
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+    font-size: 1rem;
 }
 
 #app {
