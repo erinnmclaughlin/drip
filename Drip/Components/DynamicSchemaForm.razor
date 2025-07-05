@@ -1,0 +1,102 @@
+@using Microsoft.OpenApi.Models
+@using System.Text.Json
+
+@if (Schema.Type == "object" && Schema.Properties != null)
+{
+    var dict = Values as Dictionary<string, object?>;
+    if (dict == null) { dict = new Dictionary<string, object?>(); Values = dict; }
+    <div class="dynamic-object-group">
+        @foreach (var prop in Schema.Properties)
+        {
+            if (!dict.ContainsKey(prop.Key))
+            {
+                if (prop.Value.Type == "object")
+                    dict[prop.Key] = new Dictionary<string, object?>();
+                else if (prop.Value.Type == "array")
+                    dict[prop.Key] = new List<object?>();
+                else
+                    dict[prop.Key] = "";
+            }
+            <div class="dynamic-field-group">
+                <label>@prop.Key</label>
+                @if (prop.Value.Type == "object")
+                {
+                    <DynamicSchemaForm Schema="@prop.Value"
+                                       Values="@(dict[prop.Key] as Dictionary<string, object?>)" />
+                }
+                else if (prop.Value.Type == "array")
+                {
+                    <DynamicSchemaForm Schema="@prop.Value"
+                                       Values="@(dict[prop.Key] as List<object?>)" />
+                }
+                else
+                {
+                    <input value="@(dict[prop.Key]?.ToString() ?? string.Empty)"
+                           @oninput="e => dict[prop.Key] = e.Value?.ToString()" />
+                }
+            </div>
+        }
+    </div>
+}
+else if (Schema.Type == "array" && Schema.Items != null)
+{
+    var list = Values as List<object?>;
+    if (list == null) { list = new List<object?>(); Values = list; }
+    <div class="dynamic-array-group">
+        @for (int i = 0; i < list.Count; i++)
+        {
+            <div class="dynamic-array-item">
+                @if (Schema.Items.Type == "object")
+                {
+                    <DynamicSchemaForm Schema="@Schema.Items"
+                                       Values="@(list[i] as Dictionary<string, object?> ?? (list[i] = new Dictionary<string, object?>()))" />
+                }
+                else if (Schema.Items.Type == "array")
+                {
+                    <DynamicSchemaForm Schema="@Schema.Items"
+                                       Values="@(list[i] as List<object?> ?? (list[i] = new List<object?>()))" />
+                }
+                else
+                {
+                    <input value="@(list[i]?.ToString() ?? string.Empty)"
+                           @oninput="e => list[i] = e.Value?.ToString()" />
+                }
+                <button type="button" @onclick="() => RemoveArrayItem(i)">Remove</button>
+            </div>
+        }
+        <button type="button" @onclick="AddArrayItem">Add Item</button>
+    </div>
+}
+else
+{
+    <input value="@(Values?.ToString() ?? string.Empty)"
+           @oninput="e => Values = e.Value?.ToString()" />
+}
+
+@code {
+    [Parameter]
+    public required OpenApiSchema Schema { get; set; }
+    [Parameter]
+    public required object? Values { get; set; }
+
+    private void AddArrayItem()
+    {
+        if (Values is List<object?> list)
+        {
+            if (Schema.Items?.Type == "object")
+                list.Add(new Dictionary<string, object?>());
+            else if (Schema.Items?.Type == "array")
+                list.Add(new List<object?>());
+            else
+                list.Add("");
+        }
+    }
+
+    private void RemoveArrayItem(int index)
+    {
+        if (Values is List<object?> list && index >= 0 && index < list.Count)
+        {
+            list.RemoveAt(index);
+        }
+    }
+} 

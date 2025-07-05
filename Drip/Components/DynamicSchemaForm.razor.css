@@ -1,0 +1,65 @@
+.dynamic-object-group {
+    border-left: 2px solid var(--border-light);
+    margin-left: 1em;
+    padding-left: 1em;
+    margin-bottom: 1em;
+}
+
+.dynamic-field-group {
+    margin-bottom: 0.75em;
+}
+
+.dynamic-array-group {
+    border-left: 2px dashed var(--border-light);
+    margin-left: 1em;
+    padding-left: 1em;
+    margin-bottom: 1em;
+}
+
+.dynamic-array-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5em;
+    gap: 0.5em;
+}
+
+.dynamic-array-item button {
+    margin-left: 0.5em;
+    background: var(--accent-error, #e57373);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 0.95em;
+}
+
+.dynamic-array-group > button {
+    margin-top: 0.5em;
+    background: var(--accent-info, #0078d4);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.95em;
+}
+
+.dynamic-field-group label {
+    font-weight: 500;
+    margin-bottom: 0.25em;
+}
+
+.dynamic-field-group input {
+    padding: 6px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    font-size: 1em;
+    background: var(--background-primary);
+    margin-top: 2px;
+}
+
+.dynamic-field-group input:focus {
+    border-color: var(--accent-info);
+    outline: none;
+} 

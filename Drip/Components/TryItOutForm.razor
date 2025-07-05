@@ -1,5 +1,6 @@
 @using Microsoft.OpenApi.Models
 @using System.Text.Json
+@using Drip.Components
 
 @if (OpenApiOperation is not null && (OpenApiOperation.Parameters?.Any() == true || OpenApiOperation.RequestBody != null))
 {
@@ -31,34 +32,14 @@
             }
             @if (OpenApiOperation.RequestBody != null)
             {
-                <div class="form-section">
-                    <h3 class="section-header">Request Body</h3>
-                    @if (bodyValues.Count > 0)
-                    {
-                        @foreach (var prop in bodyValues.Keys)
-                        {
-                            <div class="form-field">
-                                <label>
-                                    <span class="field-label">@prop</span>
-                                </label>
-                                <input class="form-input"
-                                       value="@bodyValues[prop]"
-                                       @oninput="(e => bodyValues[prop] = e.Value?.ToString() ?? string.Empty)" />
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <div class="form-field">
-                            <label>
-                                <span class="field-label">Raw Body</span>
-                            </label>
-                            <textarea class="form-input"
-                                      value="@RawBodyValue"
-                                      @oninput="(e => RawBodyValue = e.Value?.ToString() ?? string.Empty)"></textarea>
-                        </div>
-                    }
-                </div>
+                var content = OpenApiOperation.RequestBody.Content.FirstOrDefault();
+                if (content.Value?.Schema != null)
+                {
+                    <div class="form-section">
+                        <h3 class="section-header">Request Body</h3>
+                        <DynamicSchemaForm Schema="content.Value.Schema" Values="bodyObjectValues" />
+                    </div>
+                }
             }
             <button type="submit" class="send-btn">Send Request</button>
         </form>
@@ -78,7 +59,7 @@
     public OpenApiOperation? OpenApiOperation { get; set; }
 
     private Dictionary<string, string> parameterValues = new();
-    private Dictionary<string, string> bodyValues = new();
+    private Dictionary<string, object?> bodyObjectValues = new();
     private string? apiResponse;
 
     protected override void OnParametersSet()
@@ -86,21 +67,15 @@
         if (OpenApiOperation != null)
         {
             parameterValues = OpenApiOperation.Parameters?.ToDictionary(p => p.Name, p => string.Empty) ?? new();
-            if (OpenApiOperation.RequestBody != null && OpenApiOperation.RequestBody.Content.Values.FirstOrDefault()?.Schema?.Properties != null)
+            if (OpenApiOperation.RequestBody != null && OpenApiOperation.RequestBody.Content.Values.FirstOrDefault()?.Schema != null)
             {
-                bodyValues = OpenApiOperation.RequestBody.Content.Values.First().Schema.Properties.ToDictionary(c => c.Key, c => string.Empty);
+                bodyObjectValues = new Dictionary<string, object?>();
             }
             else
             {
-                bodyValues = new();
+                bodyObjectValues = new();
             }
         }
-    }
-
-    private string RawBodyValue
-    {
-        get => bodyValues.ContainsKey("raw") ? bodyValues["raw"] : string.Empty;
-        set => bodyValues["raw"] = value;
     }
 
     private async Task HandleSubmit(EventArgs e)
@@ -138,36 +113,44 @@
         return value; // fallback to string
     }
 
-    private object? BuildRequestBody(OpenApiSchema schema, Dictionary<string, string> values)
+    private object? ConvertValuesToSchemaTypes(object? value, OpenApiSchema schema)
     {
-        if (schema.Type == "object" && schema.Properties != null)
+        if (schema.Type == "object" && schema.Properties != null && value is Dictionary<string, object?> dict)
         {
-            var dict = new Dictionary<string, object?>();
+            var result = new Dictionary<string, object?>();
             foreach (var prop in schema.Properties)
             {
-                if (values.TryGetValue(prop.Key, out var val))
+                dict.TryGetValue(prop.Key, out var propValue);
+                result[prop.Key] = ConvertValuesToSchemaTypes(propValue, prop.Value);
+            }
+            return result;
+        }
+        else if (schema.Type == "array" && schema.Items != null && value is List<object?> list)
+        {
+            return list.Select(item => ConvertValuesToSchemaTypes(item, schema.Items)).ToList();
+        }
+        else
+        {
+            // Primitive conversion
+            if (value is string s)
+            {
+                switch (schema.Type)
                 {
-                    dict[prop.Key] = ConvertStringToType(val, prop.Value);
+                    case "integer":
+                        if (int.TryParse(s, out var i)) return i;
+                        break;
+                    case "number":
+                        if (double.TryParse(s, out var d)) return d;
+                        break;
+                    case "boolean":
+                        if (bool.TryParse(s, out var b)) return b;
+                        break;
+                    default:
+                        return s;
                 }
             }
-            return dict;
+            return value;
         }
-        else if (schema.Type == "array" && schema.Items != null)
-        {
-            // Assume a single input string for the array, comma-separated
-            if (values.TryGetValue("root", out var val))
-            {
-                return ConvertStringToType(val, schema);
-            }
-        }
-        else if (schema.Type != null)
-        {
-            if (values.TryGetValue("root", out var val))
-            {
-                return ConvertStringToType(val, schema);
-            }
-        }
-        return null;
     }
 
     private Task SendApiRequest()
@@ -191,7 +174,7 @@
             var content = OpenApiOperation.RequestBody.Content.FirstOrDefault();
             if (content.Value?.Schema != null)
             {
-                convertedBody = BuildRequestBody(content.Value.Schema, bodyValues);
+                convertedBody = ConvertValuesToSchemaTypes(bodyObjectValues, content.Value.Schema);
             }
         }
 
