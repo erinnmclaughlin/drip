@@ -4,11 +4,15 @@
 
 <div class="drip-page-content">
     <h1>@OpenApiDocument.Info.Title <span>v@(OpenApiDocument.Info.Version)</span></h1>
+    
+    @if (OpenApiDocument.Info.Summary is { Length: > 0 } summary)
+    {
+        <DripMarkdown Content="@summary" />
+    }
+    
     @if (OpenApiDocument.Info.Description is { Length: > 0 } description)
     {
-        <div>
-            @((MarkupString)RenderMarkdownWithLinksNewTab(description))
-        </div>
+        <DripMarkdown Content="@description" />
     }
 </div>
 
@@ -17,15 +21,4 @@
     [CascadingParameter]
     public required OpenApiDocument OpenApiDocument { get; set; }
 
-    private static string RenderMarkdownWithLinksNewTab(string markdown)
-    {
-        var html = Markdig.Markdown.ToHtml(markdown);
-        // Add target="_blank" and rel="noopener noreferrer" to all <a> tags
-        return System.Text.RegularExpressions.Regex.Replace(
-            html,
-            "<a\\s",
-            "<a target=\"_blank\" rel=\"noopener noreferrer\" ",
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase
-        );
-    }
 }

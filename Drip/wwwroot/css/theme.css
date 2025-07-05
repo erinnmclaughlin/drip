@@ -16,18 +16,24 @@ html:not(.dark) .dark-mode-only {
 :root {
     --drip-background: #f6f8fa;
     --drip-background-secondary: #ffffff;
+    --drip-background-tertiary: #f1f3f4;
+    --drip-background-code-block: #ffffff;
 }
 .dark {
     --drip-background: #0d1117;
     --drip-background-secondary: #161b22;
+    --drip-background-tertiary: #21262d;
+    --drip-background-code-block: #21262d;
 }
 
 /* Foreground Colors */
 :root {
     --drip-foreground:  #24292f;
+    --drip-foreground-code-block: #24292f;
 }
 .dark {
     --drip-foreground: #ffffff;
+    --drip-foreground-code-block: #e6edf3;
 }
 
 /* Accent Colors */

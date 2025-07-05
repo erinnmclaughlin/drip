@@ -7,7 +7,7 @@ public sealed class OpenApiDocumentLoader(HttpClient httpClient)
 {
     private readonly HttpClient _httpClient = httpClient;
 
-    public async Task<OpenApiDocument?> LoadLocalDocumentAsync(string fileName = "star-trek.json")
+    public async Task<OpenApiDocument?> LoadLocalDocumentAsync(string fileName = "scalar-galaxy.json")
     {
         var reader = new OpenApiJsonReader();
         await using var stream = await _httpClient.GetStreamAsync(fileName);

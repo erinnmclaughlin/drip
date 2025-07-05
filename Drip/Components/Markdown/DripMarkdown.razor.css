@@ -1,0 +1,72 @@
+﻿.markdown img,
+.markdown ::deep img {
+    max-width: 100%;
+}
+
+.markdown table,
+.markdown ::deep table {
+    border-color: currentcolor;
+    border-collapse: collapse;
+}
+
+.markdown td,
+.markdown th,
+.markdown ::deep td,
+.markdown ::deep th {
+    text-align: left;
+    padding: 0.5rem;
+    border: 1px solid currentcolor;
+}
+
+.markdown pre,
+.markdown ::deep pre {
+    background: var(--drip-background-code-block);
+    color: var(--drip-foreground-code-block);
+    padding: 0.5rem;
+}
+
+.markdown .markdown-alert,
+.markdown ::deep .markdown-alert {
+    border: 1px solid var(--drip-border-default);
+    border-radius: 8px;
+    background: var(--drip-background-secondary);
+}
+
+.markdown .markdown-alert > p,
+.markdown ::deep .markdown-alert > p {
+    margin: 0;
+}
+
+.markdown .markdown-alert-title,
+.markdown ::deep .markdown-alert-title {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-bottom: 1px solid var(--drip-border-default);
+    padding: 0.5rem;
+}
+
+.markdown .markdown-alert-title svg,
+.markdown ::deep .markdown-alert-title svg {
+    fill: currentColor;
+}
+
+.markdown .markdown-alert p:not(.markdown-alert-title),
+.markdown ::deep .markdown-alert p:not(.markdown-alert-title) {
+    padding: 1rem;
+}
+
+.markdown blockquote,
+.markdown ::deep blockquote {
+    position: relative;
+}
+
+.markdown blockquote::before,
+.markdown ::deep blockquote::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    height: 100%;
+    width: 0.25rem;
+    background: var(--drip-border-default);
+}

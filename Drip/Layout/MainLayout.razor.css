@@ -49,6 +49,7 @@
     bottom: 0;
     padding: 1rem;
     transition: transform 0.15s ease-in;
+    overflow-y: auto;
 }
 
 .sidebar-open-mobile .drip-sidebar {
@@ -57,6 +58,7 @@
 
 .drip-main-content {
     flex-grow: 1;
+    overflow-y: auto;
 }
 
 @media (min-width: 992px) {

@@ -1,3 +1,23 @@
 ﻿@namespace Drip.Components
 
-<p>hey</p>
+@foreach (var tag in OpenApiDocument.Tags ?? [])
+{
+    <label>@tag.Name</label>
+    <ul>
+        @foreach (var (pathPrefix, path) in OpenApiDocument.Paths)
+        {
+            @if (path.Operations.Any(o => o.Value.Tags?.Any(t => t.Target == tag) ?? false))
+            {
+                <li>@(path.Summary ?? pathPrefix)</li>
+            }
+        }
+    </ul>
+}
+
+
+@code {
+
+    [CascadingParameter]
+    public required OpenApiDocument OpenApiDocument { get; set; }
+
+}

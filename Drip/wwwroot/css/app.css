@@ -2,6 +2,9 @@
 
 * {
     box-sizing: border-box;
+}
+
+*:not(.markdown *) {
     margin: 0;
     padding: 0;
 }

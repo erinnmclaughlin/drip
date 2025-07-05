@@ -1,0 +1,31 @@
+﻿@using Markdig
+@namespace Drip.Components
+
+@if (Content is not null)
+{
+    <div class="markdown">
+        @((MarkupString)RenderMarkdownWithLinksNewTab(Content))
+    </div>
+}
+
+@code {
+    private static MarkdownPipeline MarkdownPipeline { get; } = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+    
+    [Parameter]
+    public string? Content { get; set; }
+    
+    private static string RenderMarkdownWithLinksNewTab(string markdown)
+    {
+        var html = Markdown.ToHtml(markdown, MarkdownPipeline);
+        
+        Console.WriteLine(markdown);
+        
+        // Add target="_blank" and rel="noopener noreferrer" to all <a> tags
+        return System.Text.RegularExpressions.Regex.Replace(
+            html,
+            "<a\\s",
+            "<a target=\"_blank\" rel=\"noopener noreferrer\" ",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+    }
+}
