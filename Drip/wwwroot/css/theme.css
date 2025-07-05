@@ -4,15 +4,6 @@
     color-scheme: dark;
 }
 
-/* Breakpoints */
-:root {
-    --drip-breakpoint-sm: 576px;
-    --drip-breakpoint-md: 768px;
-    --drip-breakpoint-lg: 992px;
-    --drip-breakpoint-xl: 1200px;
-    --drip-breakpoint-xxl: 1400px;
-}
-
 /* Background Colors */
 :root {
     --drip-background: #f6f8fa;

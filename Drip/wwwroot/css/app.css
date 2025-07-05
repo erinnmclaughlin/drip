@@ -20,6 +20,10 @@ body {
     position: relative;
 }
 
+h1:focus {
+    outline: none;
+}
+
 #blazor-error-ui {
     color-scheme: light only;
     background: lightyellow;

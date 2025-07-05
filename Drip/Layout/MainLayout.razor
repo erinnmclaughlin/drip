@@ -4,7 +4,12 @@
     <div class="drip-topbar">
         <DripTopBarContent />
     </div>
-    <div class="drip-main-content">
-        @Body
+    <div class="drip-body-layout">
+        <aside id="dripSideBar" class="drip-sidebar">
+            <DripSideBarContent />
+        </aside>
+        <main class="drip-main-content">
+            @Body
+        </main>
     </div>
 </div>

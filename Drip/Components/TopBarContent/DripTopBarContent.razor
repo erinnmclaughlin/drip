@@ -1,0 +1,14 @@
+﻿@namespace Drip.Components
+
+<div class="drip-topbar-content">
+    <div class="drip-topbar-content-start">
+        <DripIconButton id="dripSideBarMenuToggler" onclick="document.getElementById('dripSideBar').classList.toggle('open')">
+            @DripIcons.HamburgerMenu()
+        </DripIconButton>
+    </div>
+    <div class="drip-topbar-content-end">
+        <DripIconButton id="dripThemeToggler" onclick="document.documentElement.classList.toggle('dark')">
+            @DripIcons.Moon()
+        </DripIconButton>
+    </div>
+</div>
