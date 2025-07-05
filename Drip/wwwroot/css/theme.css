@@ -30,6 +30,16 @@ html:not(.dark) .dark-mode-only {
     --drip-foreground: #ffffff;
 }
 
+/* Accent Colors */
+:root {
+    --drip-accent-primary: #0969da;
+    --drip-accent-secondary: #9a6700;
+}
+.dark {
+    --drip-accent-primary: #58a6ff;
+    --drip-accent-secondary: #f0883e;
+}
+
 /* Borders */
 :root {
     --drip-border-default: #d0d7de;

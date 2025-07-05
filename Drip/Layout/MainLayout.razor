@@ -1,15 +1,35 @@
 ﻿@inherits LayoutComponentBase
+@inject OpenApiDocumentLoader OpenApiDocumentLoader
 
-<div id="dripLayout" class="drip-layout">
-    <div class="drip-topbar">
-        <DripTopBarContent />
+@if (OpenApiDocument is null)
+{
+    <DripLoader />
+}
+else
+{
+    <div id="dripLayout" class="drip-layout">
+        <CascadingValue Value="OpenApiDocument">
+            <div class="drip-topbar">
+                <DripTopBarContent />
+            </div>
+            <div class="drip-body-layout">
+                <aside id="dripSideBar" class="drip-sidebar">
+                    <DripSideBarContent/>
+                </aside>
+                <main class="drip-main-content">
+                    @Body
+                </main>
+            </div>
+        </CascadingValue>
     </div>
-    <div class="drip-body-layout">
-        <aside id="dripSideBar" class="drip-sidebar">
-            <DripSideBarContent />
-        </aside>
-        <main class="drip-main-content">
-            @Body
-        </main>
-    </div>
-</div>
+}
+
+@code {
+
+    private OpenApiDocument? OpenApiDocument { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        OpenApiDocument = await OpenApiDocumentLoader.LoadLocalDocumentAsync();
+    }
+}

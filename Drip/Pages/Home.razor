@@ -3,11 +3,29 @@
 <PageTitle>Home</PageTitle>
 
 <div class="drip-page-content">
-    <h1>Hello, world!</h1>
-
-    Welcome to your new app.
-
-    <div>
-        <input type="text" placeholder="test..." />
-    </div>
+    <h1>@OpenApiDocument.Info.Title <span>v@(OpenApiDocument.Info.Version)</span></h1>
+    @if (OpenApiDocument.Info.Description is { Length: > 0 } description)
+    {
+        <div>
+            @((MarkupString)RenderMarkdownWithLinksNewTab(description))
+        </div>
+    }
 </div>
+
+@code {
+
+    [CascadingParameter]
+    public required OpenApiDocument OpenApiDocument { get; set; }
+
+    private static string RenderMarkdownWithLinksNewTab(string markdown)
+    {
+        var html = Markdig.Markdown.ToHtml(markdown);
+        // Add target="_blank" and rel="noopener noreferrer" to all <a> tags
+        return System.Text.RegularExpressions.Regex.Replace(
+            html,
+            "<a\\s",
+            "<a target=\"_blank\" rel=\"noopener noreferrer\" ",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+    }
+}
