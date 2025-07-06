@@ -1,3 +1,11 @@
 ﻿.drip-page-content {
     padding: 1rem;
+    max-width: 1200px;
+    margin-inline: auto;
+}
+
+@media (min-width: 992px) {
+    .drip-page-content {
+        padding: 2.5rem;
+    }
 }

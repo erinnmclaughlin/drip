@@ -1,5 +1,4 @@
-﻿using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Reader;
+﻿using Microsoft.OpenApi.Reader;
 
 namespace Drip;
 
@@ -7,11 +6,10 @@ public sealed class OpenApiDocumentLoader(HttpClient httpClient)
 {
     private readonly HttpClient _httpClient = httpClient;
 
-    public async Task<OpenApiDocument?> LoadLocalDocumentAsync(string fileName = "scalar-galaxy.json")
+    public async Task<ReadResult> LoadLocalDocumentAsync(string fileName = "example.json")
     {
         var reader = new OpenApiJsonReader();
         await using var stream = await _httpClient.GetStreamAsync(fileName);
-        var (document, _) = await reader.ReadAsync(stream, new OpenApiReaderSettings());
-        return document;
+        return await reader.ReadAsync(stream, new OpenApiReaderSettings());
     }
 }

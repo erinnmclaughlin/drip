@@ -1,21 +1,25 @@
 ﻿@page "/"
-@page "/-"
-@page "/-/{TagName}"
-@page "/-/{TagName}/{Method}"
 
 <PageTitle>Home</PageTitle>
 
 <div class="drip-page-content">
-    <h1>@OpenApiDocument.Info.Title <span>v@(OpenApiDocument.Info.Version)</span></h1>
-    
+    <div class="drip-tags">
+        <DripTag>v@(OpenApiDocument.Info.Version)</DripTag>
+        @if (OpenApiDiagnostic?.SpecificationVersion is { } specVersion)
+        {
+            <DripTag>@GetDisplayName(specVersion)</DripTag>
+        }
+    </div>
+    <h1>@OpenApiDocument.Info.Title</h1>
+
     @if (OpenApiDocument.Info.Summary is { Length: > 0 } summary)
     {
-        <DripMarkdown Content="@summary" />
+        <DripMarkdown Content="@summary"/>
     }
-    
+
     @if (OpenApiDocument.Info.Description is { Length: > 0 } description)
     {
-        <DripMarkdown Content="@description" />
+        <DripMarkdown Content="@description"/>
     }
 </div>
 
@@ -23,9 +27,21 @@
     [CascadingParameter]
     public required OpenApiDocument OpenApiDocument { get; set; }
     
+    [CascadingParameter]
+    public OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
+    
     [Parameter]
     public string? TagName { get; set; }
     
     [Parameter]
     public string? Method { get; set; }
+
+    private static string GetDisplayName(OpenApiSpecVersion specVersion) => specVersion switch
+    {
+        OpenApiSpecVersion.OpenApi2_0 => "OAS 2.0",
+        OpenApiSpecVersion.OpenApi3_0 => "OAS 3.0",
+        OpenApiSpecVersion.OpenApi3_1 => "OAS 3.1",
+        _ => specVersion.ToString()
+    };
+
 }

@@ -9,17 +9,19 @@ else
 {
     <div id="dripLayout" class="drip-layout">
         <CascadingValue Value="OpenApiDocument">
-            <div class="drip-topbar">
-                <DripTopBarContent />
-            </div>
-            <div class="drip-body-layout">
-                <aside id="dripSideBar" class="drip-sidebar">
-                    <DripSideBarContent/>
-                </aside>
-                <main class="drip-main-content">
-                    @Body
-                </main>
-            </div>
+            <CascadingValue Value="OpenApiDiagnostic">
+                <div class="drip-topbar">
+                    <DripTopBarContent />
+                </div>
+                <div class="drip-body-layout">
+                    <aside id="dripSideBar" class="drip-sidebar">
+                        <DripSideBarContent/>
+                    </aside>
+                    <main class="drip-main-content">
+                        @Body
+                    </main>
+                </div>
+            </CascadingValue>
         </CascadingValue>
     </div>
 }
@@ -27,9 +29,10 @@ else
 @code {
 
     private OpenApiDocument? OpenApiDocument { get; set; }
+    private OpenApiDiagnostic? OpenApiDiagnostic { get; set; }
 
     protected override async Task OnInitializedAsync()
-    {
-        OpenApiDocument = await OpenApiDocumentLoader.LoadLocalDocumentAsync();
+    { 
+        (OpenApiDocument, OpenApiDiagnostic) = await OpenApiDocumentLoader.LoadLocalDocumentAsync();
     }
 }

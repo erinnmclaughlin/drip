@@ -1,0 +1,17 @@
+.drip-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15rem 0.625rem;
+    font-size: 0.75rem;
+    border-radius: 0.75rem;
+    background-color: #e2e8f0;
+    color: #1a202c;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dark .drip-tag {
+    background-color: #30363d;
+    color: #c9d1d9;
+}
