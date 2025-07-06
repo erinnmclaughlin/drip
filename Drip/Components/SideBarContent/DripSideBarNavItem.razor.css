@@ -1,4 +1,4 @@
-﻿.drip-sidebar-dropdown-toggle {
+.drip-sidebar-nav-item ::deep a {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -8,23 +8,17 @@
     background: transparent;
     border: none;
     text-align: left;
+    color: var(--drip-foreground);
+    text-decoration: none;
 }
 
-.drip-sidebar-dropdown-toggle.active {
+.drip-sidebar-nav-item ::deep .active {
     background: var(--drip-background-hover);
     color: var(--drip-foreground);
     font-weight: 500;
 }
 
-.drip-sidebar-dropdown-toggle:hover {
+.drip-sidebar-nav-item ::deep a:hover {
     background: var(--drip-background-hover);
     color: var(--drip-foreground);
-}
-
-.drip-sidebar-dropdown-content {
-    display: none;
-}
-
-.drip-sidebar-dropdown.expanded .drip-sidebar-dropdown-content {
-    display: block;
 }

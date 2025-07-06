@@ -2,20 +2,12 @@
 
 <div class="drip-sidebar-dropdown @(IsExpanded ? "expanded" : "")">
     <button class="drip-sidebar-dropdown-toggle @(HasActiveOperation ? "active" : "")"  type="button" @onclick="ToggleDropdown">
-        <span class="drip-sidebar-dropdown-icon">
-            @if (IsExpanded)
-            {
-                <text>📂</text>
-            }
-            else
-            {
-                <text>📁</text>
-            }
-        </span>
-        <span class="drip-sidebar-dropdown-text">@ButtonText</span>
+        @Icon @ButtonText
     </button>
     <div class="drip-sidebar-dropdown-content">
-        @ChildContent
+        <CascadingValue Value="this">
+            @ChildContent
+        </CascadingValue>
     </div>
 </div>
 
@@ -24,6 +16,8 @@
     private OpenApiDocument? _openApiDocument;
     private bool IsExpanded { get; set; }
 
+    private string Icon => IsExpanded ? "📂" : "📁";
+    
     [Parameter] public required string ButtonText { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool HasActiveOperation { get; set; }

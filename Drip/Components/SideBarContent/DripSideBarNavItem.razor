@@ -1,0 +1,21 @@
+@namespace Drip.Components
+
+<div class="drip-sidebar-nav-item">
+    <NavLink href="@Href" Match="@Match">
+        @ChildContent
+    </NavLink>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    [Parameter]
+    public string? Href { get; set; }
+    
+    [Parameter]
+    public NavLinkMatch Match { get; set; }
+    
+    [CascadingParameter]
+    public DripSideBarNavGroup? ParentGroup { get; set; }
+}

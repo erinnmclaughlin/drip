@@ -1,21 +1,29 @@
 ﻿@namespace Drip.Components
 
+<DripSideBarNavItem Href="" Match="NavLinkMatch.All">
+    🏠 Home
+</DripSideBarNavItem>
+
 @foreach (var tag in OpenApiDocument.Tags ?? [])
 {
     <DripSideBarNavGroup ButtonText="@tag.Name">
         @foreach (var (pathPrefix, path) in OpenApiDocument.Paths)
         {
-            @if (path.Operations.Any(o => o.Value.Tags?.Any(t => t.Target == tag) ?? false))
+            foreach (var (operationType, operation) in path.Operations)
             {
-                <div>@(path.Summary ?? pathPrefix)</div>
+                if (operation.Tags?.Any(t => t.Target == tag) ?? false)
+                {
+                    <DripSideBarNavItem Href="@($"-/{tag.Name}/-/{operationType}/-/{pathPrefix.TrimStart('/')}")">
+                        @operationType @(path.Summary ?? pathPrefix)
+                    </DripSideBarNavItem>
+                }
             }
         }
     </DripSideBarNavGroup>
 }
 
 @code {
-
     [CascadingParameter]
     public required OpenApiDocument OpenApiDocument { get; set; }
-
+    
 }
