@@ -13,7 +13,7 @@
             {
                 if (operation.Tags?.Any(t => t.Target == tag) ?? false)
                 {
-                    <DripSideBarNavItem Href="@($"-/{tag.Name}/-/{operationType}/-/{pathPrefix.TrimStart('/')}")">
+                    <DripSideBarNavItem Href="@($"-/{System.Web.HttpUtility.UrlEncode(operation.OperationId)}")">
                         @operationType @(path.Summary ?? pathPrefix)
                     </DripSideBarNavItem>
                 }

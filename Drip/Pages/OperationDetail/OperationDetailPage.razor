@@ -1,8 +1,6 @@
-@page "/-/{TagName}/-/{Method}/-/{Path}"
+@page "/-/{OperationId}"
 
-<p>Tag Name: @TagName</p>
-<p>Method: @Method</p>
-<p>Path: @Path</p>
+<p>Operation ID: @OperationId</p>
 
 <h1>Path Item: @PathItem?.Summary</h1>
 <h1>Operation: @Operation?.Summary</h1>
@@ -12,27 +10,15 @@
     private OpenApiOperation? Operation { get; set; }
     
     [Parameter]
-    public string? TagName { get; set; }
-    
-    [Parameter]
-    public string? Method { get; set; }
-
-    [Parameter] 
-    public string? Path { get; set; }
+    public string? OperationId { get; set; }
     
     [CascadingParameter]
     public required OpenApiDocument OpenApiDocument { get; set; }
 
     protected override void OnParametersSet()
     {
-        PathItem = OpenApiDocument.Paths
-            .Where(x => x.Key.TrimStart('/').Equals(Path, StringComparison.OrdinalIgnoreCase))
-            .Select(x => x.Value)
-            .FirstOrDefault();
-        
-        Operation = PathItem?.Operations
-            .Where(x => x.Key.ToString().Equals(Method, StringComparison.OrdinalIgnoreCase))
-            .Select(x => x.Value)
-            .FirstOrDefault();
+        Operation = OpenApiDocument.Paths
+            .SelectMany(path => path.Value.Operations.Values)
+            .FirstOrDefault(op => op.OperationId == OperationId);
     }
 }
