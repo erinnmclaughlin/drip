@@ -14,7 +14,7 @@
                 if (operation.Tags?.Any(t => t.Target == tag) ?? false)
                 {
                     <DripSideBarNavItem Href="@($"-/{System.Web.HttpUtility.UrlEncode(operation.OperationId)}")">
-                        @operationType @(path.Summary ?? pathPrefix)
+                        <span>@(path.Summary ?? pathPrefix)</span> <DripSideBarOperationTag OperationType="operationType" />
                     </DripSideBarNavItem>
                 }
             }

@@ -1,0 +1,10 @@
+@namespace Drip.Components
+
+<span class="operation-tag operation-tag--@OperationType.ToString().ToLowerInvariant()">
+    @OperationType.ToString().ToUpperInvariant()
+</span>
+
+@code {
+    [Parameter]
+    public OperationType OperationType { get; set; }
+}

@@ -22,3 +22,7 @@
     background: var(--drip-background-hover);
     color: var(--drip-foreground);
 }
+
+.drip-sidebar-dropdown-content .drip-sidebar-nav-item ::deep a {
+    font-size: 0.9rem;
+}

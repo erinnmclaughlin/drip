@@ -1,0 +1,72 @@
+.operation-tag--get {
+    --accent-color: #2563EB;
+    --background-rgb: 88 166 255;
+}
+.dark .operation-tag--get {
+    --accent-color: #60A5FA;
+    --background-rgb: 37 99 235;
+}
+
+
+.operation-tag--post {
+    --accent-color: #16A34A;
+    --background-rgb: 126 231 135;
+}
+.dark .operation-tag--post {
+    --accent-color: #4ADE80;
+    --background-rgb: 22 163 74;
+}
+
+.operation-tag--put {
+    --accent-color: #D97706;
+    --background-rgb: 240 136 62;
+}
+.dark .operation-tag--put {
+    --accent-color: #FBBF24;
+    --background-rgb: 217 119 6;
+}
+
+.operation-tag--patch {
+    --accent-color: #BE185D;
+    --background-rgb: 210 168 255;
+}
+.dark .operation-tag--patch {
+    --accent-color: #F472B6;
+    --background-rgb: 234 88 12;
+}
+
+.operation-tag--delete {
+    --accent-color: #DC2626;
+    --background-rgb: 248 81 73;
+}
+.dark .operation-tag--delete {
+    --accent-color: #F87171;
+    --background-rgb: 220 38 38;
+}
+
+.operation-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent-color);
+    border: 1px solid currentColor;
+    background: rgb(var(--background-rgb) / 0.1);
+    position: relative;
+    overflow: hidden;
+    margin-left: auto;
+}
+
+.operation-tag::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    background: currentColor;
+}
