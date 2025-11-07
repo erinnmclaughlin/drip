@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favicon Generator</title>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Favicon Generator</h1>
+    <canvas id="faviconCanvas" width="32" height="32"></canvas>
+    <br>
+    <button onclick="downloadFavicon()">Download favicon.ico</button>
+    
+    <script>
+        const canvas = document.getElementById('faviconCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, 32, 32);
+        
+        // Draw raindrop
+        ctx.fillStyle = '#3fa7f4';
+        ctx.strokeStyle = '#3fa7f4';
+        ctx.lineWidth = 1;
+        
+        // Create raindrop path
+        ctx.beginPath();
+        ctx.moveTo(16, 3);
+        ctx.quadraticCurveTo(16, 3, 6, 10);
+        ctx.quadraticCurveTo(6, 14, 16, 21);
+        ctx.quadraticCurveTo(26, 14, 26, 10);
+        ctx.quadraticCurveTo(16, 3, 16, 3);
+        ctx.closePath();
+        
+        // Fill and stroke
+        ctx.fill();
+        ctx.stroke();
+        
+        function downloadFavicon() {
+            const link = document.createElement('a');
+            link.download = 'favicon.ico';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html> 

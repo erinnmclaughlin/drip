@@ -1,0 +1,111 @@
+﻿{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ExampleApi | v1",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5053"
+    }
+  ],
+  "paths": {
+    "/forecasts": {
+      "get": {
+        "tags": [
+          "Weather Forecasts"
+        ],
+        "summary": "Get Weather Forecasts",
+        "description": "Get the weather forecast for the next 10 days.",
+        "operationId": "GetWeatherForecasts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecasts/forecast": {
+      "get": {
+        "tags": [
+          "Weather Forecasts"
+        ],
+        "summary": "Get Weather Forecast",
+        "description": "Get the weather forecast for a specific date.",
+        "operationId": "GetWeatherForecast",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "default": null
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherForecast"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "WeatherForecast": {
+        "required": [
+          "date",
+          "temperatureC",
+          "summary"
+        ],
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "The date that the weather forecast applies to.",
+            "format": "date"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "description": "The temperature in Celsius",
+            "format": "int32"
+          },
+          "summary": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "A summary of the forecast for this day"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "description": "The temperature in Fahrenheit",
+            "format": "int32"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Weather Forecasts"
+    }
+  ]
+}
